@@ -1,0 +1,132 @@
+﻿@using SpecLab.Business.BusinessEnum
+@using SpecLab.FrontEnd
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="~/images/test-tube-multi-size.ico" rel="shortcut icon" type="image/x-icon" />
+
+    @Styles.Render("~/Content/bootstrap.min.css",
+            "~/Content/blue.css",
+            "~/Content/common.css",
+            "~/Content/datepicker3.min.css")
+    @RenderSection("style", required: false)
+
+    @Scripts.Render("~/Scripts/jquery-2.1.0.min.js",
+            "~/Scripts/jquery.json-2.3.min.js",
+            "~/Scripts/jquery.numeric.min.js",
+            "~/Scripts/angular.min.js",
+            "~/Scripts/bootstrap.min.js",
+            "~/Scripts/ui-bootstrap-tpls.js",
+
+            "~/Scripts/bootstrap-datepicker.js",
+            "~/Scripts/locales/bootstrap-datepicker.vi.js",
+            "~/Scripts/speclab.common.js")
+    @RenderSection("scripts", required: false)
+
+    <title>@SpecLab.Business.CommonConstant.AppName - @ViewBag.Title</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Action("Index", "Home")">@SpecLab.Business.CommonConstant.AppName</a>
+            </div>
+            <div class="collapse navbar-collapse navbar-right">
+                <ul class="nav navbar-nav">
+                    <li><a class="user-info" href="#" onclick="return false;">@SessionUtils.LoginUserInfo.FullName</a></li>
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00101))
+                    {
+                        <li><a class="change-pass" href="@Url.Action("Index", "ChangePass")">Đổi mật khẩu</a></li>
+                    }
+
+                    <li><a class="link-logout" href="@Url.Action("Logout", "Account")">Đăng xuất</a></li>
+                </ul>
+            </div><!-- /.nav-collapse -->
+        </div><!-- /.container -->
+    </nav><!-- /.navbar -->
+
+    <div class="container-fluid">
+        <div class="row row-offcanvas row-offcanvas-right">
+            <div class="col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
+                <div class="list-group ">
+
+                    <a href="@Url.Action("Index", "Home")" class="list-group-item home">Trang chủ</a>
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00600))
+                    {
+                        <a href="@Url.Action("Index", "SpecControl")" class="list-group-item test-control">Quản lý mẫu</a>
+                    }
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00701))
+                    {
+                        <a href="@Url.Action("ShowCreate", "SpecImport")" class="list-group-item import-test">Nhập mẫu</a>
+                    }
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00501))
+                    {
+                        <a href="@Url.Action("ShowCreate", "SpecExport")" class="list-group-item export-test">Tạo phiếu xuất</a>
+                    }
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00401))
+                    {
+                        <a href="@Url.Action("ShowCreate", "SpecRemoval")" class="list-group-item remove-test">Tạo phiếu hủy</a>
+                    }
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00700))
+                    {
+                        <a href="@Url.Action("Index", "SpecImport")" class="list-group-item import-list">Lịch sử nhập</a>
+                    }
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00500))
+                    {
+                        <a href="@Url.Action("Index", "SpecExport")" class="list-group-item export-list">Lịch sử xuất</a>
+                    }
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00400))
+                    {
+                        <a href="@Url.Action("Index", "SpecRemoval")" class="list-group-item removal-list">Lịch sử hủy</a>
+                    }
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00800))
+                    {
+                        <a href="@Url.Action("Index", "ReportsSpecLab")" class="list-group-item report">Thống kê</a>
+                    }
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00300))
+                    {
+                        <a href="@Url.Action("Index", "StoragesControl")" class="list-group-item test-storage">Lưu trữ</a>
+                    }
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00200))
+                    {
+                        <a href="@Url.Action("Index", "UsersControl")" class="list-group-item users-control">Người dùng</a>
+                    }
+
+                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00900))
+                    {
+                        <a href="@Url.Action("Index", "ContentControl")" class="list-group-item content-control">Thông báo</a>
+                    }
+                </div>
+            </div>
+
+            @RenderBody()
+        </div>
+    </div>
+
+    <div class="container-fluid footer">
+        Phần mềm quản lý bệnh phẩm SpecLab - Phiên bản:0.01 <br />
+        Liên hệ email: uttham@mitalabvn.com
+    </div>
+   
+</body>
+</html>

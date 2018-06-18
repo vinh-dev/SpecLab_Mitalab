@@ -1,0 +1,38 @@
+.columnAction {
+    text-align: center;
+}
+
+.columnAction button {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#collapseSpecsContent_Search .btnEditUser, 
+#collapseSpecsContent_Search .btnRemoveUser {
+    display: inherit;
+}
+
+#collapseSpecsContent_Search .btnCancelEditUser, 
+#collapseSpecsContent_Search .btnSaveUser {
+    display: none;
+}
+
+#collapseSpecsContent_Search .editing .btnEditUser, 
+#collapseSpecsContent_Search .editing .btnRemoveUser, 
+#collapseSpecsContent_Search .editing .btnChangePass, 
+#collapseSpecsContent_Search .editing .btnChangeRights {
+    display: none;
+}
+
+#collapseSpecsContent_Search .editing .btnCancelEditUser, 
+#collapseSpecsContent_Search .editing .btnSaveUser {
+    display: inherit;
+}
+
+.errorUserId {
+    display:none;
+}
+
+.has-error .errorUserId {
+    display:inherit;
+}

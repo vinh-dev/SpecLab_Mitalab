@@ -1,0 +1,29 @@
+.table .columnAction {
+    text-align: center;
+}
+
+.table .columnNumberExport {
+    text-align: right;
+}
+
+#dialogFindTubeToExport {
+    z-index: 1052;
+}
+
+#dialogFindTubeToExport .selectExportCol {
+    width: 50px;
+}
+
+#dialogExportDetail.modal.modal-wide .modal-dialog,
+#dialogCreateExport.modal.modal-wide .modal-dialog, 
+#dialogFindTubeToExport.modal.modal-wide .modal-dialog {
+    width: 90%;
+}
+
+#dialogExportDetail.modal-wide .modal-body,
+#dialogCreateExport.modal-wide .modal-body,
+#dialogFindTubeToExport.modal-wide .modal-body {
+    overflow-y: auto;
+}
+
+

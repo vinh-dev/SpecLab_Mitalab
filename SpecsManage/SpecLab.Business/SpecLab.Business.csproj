@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8BC33ADA-66BD-489D-A44D-7158715A4F0F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SpecLab.Business</RootNamespace>
+    <AssemblyName>SpecLab.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Core">
+      <HintPath>..\packages\Spring.Core.1.3.2\lib\net40\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessEnum\CalculatedCondition.cs" />
+    <Compile Include="BusinessEnum\SampleType.cs" />
+    <Compile Include="BusinessEnum\HistoryAction.cs" />
+    <Compile Include="BusinessEnum\SampleSex.cs" />
+    <Compile Include="BusinessEnum\TubeSampleType.cs" />
+    <Compile Include="BusinessObjects\BusinessException.cs" />
+    <Compile Include="BusinessEnum\ErrorCode.cs" />
+    <Compile Include="BusinessObjects\ContentInfo.cs" />
+    <Compile Include="BusinessObjects\Export\TubeExportCount.cs" />
+    <Compile Include="BusinessObjects\ReportExportHistoryInfo.cs" />
+    <Compile Include="BusinessObjects\ReportSampleStatisticInfo.cs" />
+    <Compile Include="BusinessObjects\ImportNoteDetail.cs" />
+    <Compile Include="BusinessObjects\ImportNote.cs" />
+    <Compile Include="BusinessObjects\ImportNoteShortData.cs" />
+    <Compile Include="BusinessObjects\RemovalNoteDetail.cs" />
+    <Compile Include="BusinessObjects\RemovalNote.cs" />
+    <Compile Include="BusinessObjects\RemovalNoteShortData.cs" />
+    <Compile Include="BusinessObjects\ExportNoteShortData.cs" />
+    <Compile Include="BusinessObjects\ExportNoteDetail.cs" />
+    <Compile Include="BusinessObjects\ExportNote.cs" />
+    <Compile Include="BusinessObjects\SampleHistoryInfo.cs" />
+    <Compile Include="BusinessObjects\ReportStorageStatisticsInfo.cs" />
+    <Compile Include="BusinessObjects\TubeSampleSpecInfo.cs" />
+    <Compile Include="BusinessObjects\LabConnSampleInfo.cs" />
+    <Compile Include="BusinessObjects\SampleSpecInfo.cs" />
+    <Compile Include="BusinessObjects\ShortStorageInfo.cs" />
+    <Compile Include="BusinessObjects\ShortUserInfo.cs" />
+    <Compile Include="BusinessObjects\LoginUserInfo.cs" />
+    <Compile Include="BusinessEnum\UserRightCode.cs" />
+    <Compile Include="BusinessEnum\TubeSampleStatus.cs" />
+    <Compile Include="BusinessObjects\TubeSampleSearchDataItem.cs" />
+    <Compile Include="BusinessEnum\UserStatus.cs" />
+    <Compile Include="CommonConstant.cs" />
+    <Compile Include="CommonUtils.cs" />
+    <Compile Include="Database\Content.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Export.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\ExportDetail.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Header.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Import.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\ImportDetail.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Removal.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\RemovalDetail.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\SampleHistory.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\SampleSpec.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Storage.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\TubeSample.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\UserHistory.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\UserInfo.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\UserRight.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\viewExportHistory.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\viewSampleStatistic.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\viewStorageStatistic.cs">
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ConnectionService.cs" />
+    <Compile Include="EnumUtils.cs" />
+    <Compile Include="Database\SpecLab.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SpecLab.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\SpecLab.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SpecLab.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\SpecLab.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SpecLab.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Report\CellDisplay.cs" />
+    <Compile Include="Report\GridColumn.cs" />
+    <Compile Include="Report\PagingSetup.cs" />
+    <Compile Include="Report\ReportGridTable.cs" />
+    <Compile Include="Report\ReportUtils.cs" />
+    <Compile Include="Services\BaseService.cs" />
+    <Compile Include="Services\ContentService.cs" />
+    <Compile Include="Services\HeaderService.cs" />
+    <Compile Include="Services\RemovalService.cs" />
+    <Compile Include="Services\ExportService.cs" />
+    <Compile Include="Services\ReportService.cs" />
+    <Compile Include="Services\PredicateBuilder.cs" />
+    <Compile Include="Services\DatabaseCommand.cs" />
+    <Compile Include="Services\LabconnService.cs" />
+    <Compile Include="Services\TubeSampleService.cs" />
+    <Compile Include="Services\StorageService.cs" />
+    <Compile Include="Services\UserService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EntityDeploy Include="Database\SpecLab.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SpecLab.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Database\SpecLab.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SpecLab.edmx</DependentUpon>
+      <LastGenOutput>SpecLab.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Database\SpecLab.edmx.diagram">
+      <DependentUpon>SpecLab.edmx</DependentUpon>
+    </None>
+    <None Include="Database\SpecLab.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SpecLab.edmx</DependentUpon>
+      <LastGenOutput>SpecLab.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

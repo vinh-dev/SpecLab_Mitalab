@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SpecLabModelStoreContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="Exports">
+      <EntityTypeMapping TypeName="SpecLabModel.Export">
+        <MappingFragment StoreEntitySet="Export">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="SampleNumber" ColumnName="SampleNumber" />
+          <ScalarProperty Name="ExportReason" ColumnName="ExportReason" />
+          <ScalarProperty Name="ExportToUserId" ColumnName="ExportToUserId" />
+          <ScalarProperty Name="ExportUserId" ColumnName="ExportUserId" />
+          <ScalarProperty Name="ExportDate" ColumnName="ExportDate" />
+          <ScalarProperty Name="ExportId" ColumnName="ExportId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Imports">
+      <EntityTypeMapping TypeName="SpecLabModel.Import">
+        <MappingFragment StoreEntitySet="Import">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="SampleNumber" ColumnName="SampleNumber" />
+          <ScalarProperty Name="ImportUserId" ColumnName="ImportUserId" />
+          <ScalarProperty Name="ImportDate" ColumnName="ImportDate" />
+          <ScalarProperty Name="ImportId" ColumnName="ImportId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Removals">
+      <EntityTypeMapping TypeName="SpecLabModel.Removal">
+        <MappingFragment StoreEntitySet="Removal">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="SampleNumber" ColumnName="SampleNumber" />
+          <ScalarProperty Name="RemovalReason" ColumnName="RemovalReason" />
+          <ScalarProperty Name="RemovalUserId" ColumnName="RemovalUserId" />
+          <ScalarProperty Name="RemovalDate" ColumnName="RemovalDate" />
+          <ScalarProperty Name="RemovalId" ColumnName="RemovalId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Storages">
+      <EntityTypeMapping TypeName="SpecLabModel.Storage">
+        <MappingFragment StoreEntitySet="Storage">
+          <ScalarProperty Name="NumColumn" ColumnName="NumColumn" />
+          <ScalarProperty Name="NumRows" ColumnName="NumRows" />
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="NumberStorage" ColumnName="NumberStorage" />
+          <ScalarProperty Name="StorageId" ColumnName="StorageId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserHistories">
+      <EntityTypeMapping TypeName="SpecLabModel.UserHistory">
+        <MappingFragment StoreEntitySet="UserHistory">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="LogDate" ColumnName="LogDate" />
+          <ScalarProperty Name="LogId" ColumnName="LogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserInfoes">
+      <EntityTypeMapping TypeName="SpecLabModel.UserInfo">
+        <MappingFragment StoreEntitySet="UserInfo">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserRights">
+      <EntityTypeMapping TypeName="SpecLabModel.UserRight">
+        <MappingFragment StoreEntitySet="UserRights">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="RightCode" ColumnName="RightCode" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SampleSpecs">
+      <EntityTypeMapping TypeName="SpecLabModel.SampleSpec">
+        <MappingFragment StoreEntitySet="SampleSpec">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="UserInput" ColumnName="UserInput" />
+          <ScalarProperty Name="Age" ColumnName="Age" />
+          <ScalarProperty Name="Sex" ColumnName="Sex" />
+          <ScalarProperty Name="PatientName" ColumnName="PatientName" />
+          <ScalarProperty Name="SampleNumber" ColumnName="SampleNumber" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="DateInput" ColumnName="DateInput" />
+          <ScalarProperty Name="SampleSpecId" ColumnName="SampleSpecId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="viewExportHistories">
+      <EntityTypeMapping TypeName="SpecLabModel.viewExportHistory">
+        <MappingFragment StoreEntitySet="viewExportHistory">
+          <ScalarProperty Name="LocationNum" ColumnName="LocationNum" />
+          <ScalarProperty Name="NumberStorage" ColumnName="NumberStorage" />
+          <ScalarProperty Name="StorageId" ColumnName="StorageId" />
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+          <ScalarProperty Name="ExportReason" ColumnName="ExportReason" />
+          <ScalarProperty Name="ExportDate" ColumnName="ExportDate" />
+          <ScalarProperty Name="ExportUserId" ColumnName="ExportUserId" />
+          <ScalarProperty Name="SampleType" ColumnName="SampleType" />
+          <ScalarProperty Name="TubeId" ColumnName="TubeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TubeSamples">
+      <EntityTypeMapping TypeName="SpecLabModel.TubeSample">
+        <MappingFragment StoreEntitySet="TubeSample">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="NumberExport" ColumnName="NumberExport" />
+          <ScalarProperty Name="LocationNum" ColumnName="LocationNum" />
+          <ScalarProperty Name="StorageId" ColumnName="StorageId" />
+          <ScalarProperty Name="Volume" ColumnName="Volume" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="SampleType" ColumnName="SampleType" />
+          <ScalarProperty Name="TubeOrder" ColumnName="TubeOrder" />
+          <ScalarProperty Name="SampleSpecId" ColumnName="SampleSpecId" />
+          <ScalarProperty Name="TubeId" ColumnName="TubeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="viewSampleStatistics">
+      <EntityTypeMapping TypeName="SpecLabModel.viewSampleStatistic">
+        <MappingFragment StoreEntitySet="viewSampleStatistic">
+          <ScalarProperty Name="NumberExport" ColumnName="NumberExport" />
+          <ScalarProperty Name="Volume" ColumnName="Volume" />
+          <ScalarProperty Name="NumberStorage" ColumnName="NumberStorage" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="LocationNum" ColumnName="LocationNum" />
+          <ScalarProperty Name="StorageId" ColumnName="StorageId" />
+          <ScalarProperty Name="PatientName" ColumnName="PatientName" />
+          <ScalarProperty Name="UserInput" ColumnName="UserInput" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="Age" ColumnName="Age" />
+          <ScalarProperty Name="Sex" ColumnName="Sex" />
+          <ScalarProperty Name="SampleType" ColumnName="SampleType" />
+          <ScalarProperty Name="TubeId" ColumnName="TubeId" />
+          <ScalarProperty Name="SampleSpecId" ColumnName="SampleSpecId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="viewStorageStatistics">
+      <EntityTypeMapping TypeName="SpecLabModel.viewStorageStatistic">
+        <MappingFragment StoreEntitySet="viewStorageStatistics">
+          <ScalarProperty Name="NumberExport" ColumnName="NumberExport" />
+          <ScalarProperty Name="Volume" ColumnName="Volume" />
+          <ScalarProperty Name="NumberStorage" ColumnName="NumberStorage" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="TubeId" ColumnName="TubeId" />
+          <ScalarProperty Name="LocationNum" ColumnName="LocationNum" />
+          <ScalarProperty Name="StorageId" ColumnName="StorageId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExportDetails">
+      <EntityTypeMapping TypeName="SpecLabModel.ExportDetail">
+        <MappingFragment StoreEntitySet="ExportDetail">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="NumberExport" ColumnName="NumberExport" />
+          <ScalarProperty Name="LocationNum" ColumnName="LocationNum" />
+          <ScalarProperty Name="StorageId" ColumnName="StorageId" />
+          <ScalarProperty Name="Volume" ColumnName="Volume" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="TubeId" ColumnName="TubeId" />
+          <ScalarProperty Name="ExportId" ColumnName="ExportId" />
+          <ScalarProperty Name="ExportDetailId" ColumnName="ExportDetailId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ImportDetails">
+      <EntityTypeMapping TypeName="SpecLabModel.ImportDetail">
+        <MappingFragment StoreEntitySet="ImportDetail">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="NumberExport" ColumnName="NumberExport" />
+          <ScalarProperty Name="LocationNum" ColumnName="LocationNum" />
+          <ScalarProperty Name="StorageId" ColumnName="StorageId" />
+          <ScalarProperty Name="Volume" ColumnName="Volume" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="TubeId" ColumnName="TubeId" />
+          <ScalarProperty Name="ImportId" ColumnName="ImportId" />
+          <ScalarProperty Name="ImportDetailId" ColumnName="ImportDetailId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RemovalDetails">
+      <EntityTypeMapping TypeName="SpecLabModel.RemovalDetail">
+        <MappingFragment StoreEntitySet="RemovalDetail">
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="NumberExport" ColumnName="NumberExport" />
+          <ScalarProperty Name="LocationNum" ColumnName="LocationNum" />
+          <ScalarProperty Name="StorageId" ColumnName="StorageId" />
+          <ScalarProperty Name="Volume" ColumnName="Volume" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="TubeId" ColumnName="TubeId" />
+          <ScalarProperty Name="RemovalId" ColumnName="RemovalId" />
+          <ScalarProperty Name="RemovalDetailId" ColumnName="RemovalDetailId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SampleHistories">
+      <EntityTypeMapping TypeName="SpecLabModel.SampleHistory">
+        <MappingFragment StoreEntitySet="SampleHistory">
+          <ScalarProperty Name="NumberExport" ColumnName="NumberExport" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="LocationNum" ColumnName="LocationNum" />
+          <ScalarProperty Name="StorageId" ColumnName="StorageId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Volume" ColumnName="Volume" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+          <ScalarProperty Name="HistoryDate" ColumnName="HistoryDate" />
+          <ScalarProperty Name="TubeId" ColumnName="TubeId" />
+          <ScalarProperty Name="HistoryId" ColumnName="HistoryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Contents">
+      <EntityTypeMapping TypeName="SpecLabModel.Content">
+        <MappingFragment StoreEntitySet="Content">
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="ContentText" ColumnName="ContentText" />
+          <ScalarProperty Name="ContentId" ColumnName="ContentId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Headers">
+      <EntityTypeMapping TypeName="SpecLabModel.Header">
+        <MappingFragment StoreEntitySet="Header">
+          <ScalarProperty Name="PosSign2" ColumnName="PosSign2" />
+          <ScalarProperty Name="Chief2" ColumnName="Chief2" />
+          <ScalarProperty Name="WebSite" ColumnName="WebSite" />
+          <ScalarProperty Name="LabID" ColumnName="LabID" />
+          <ScalarProperty Name="PosSign" ColumnName="PosSign" />
+          <ScalarProperty Name="Chief" ColumnName="Chief" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Lab" ColumnName="Lab" />
+          <ScalarProperty Name="Hospital" ColumnName="Hospital" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

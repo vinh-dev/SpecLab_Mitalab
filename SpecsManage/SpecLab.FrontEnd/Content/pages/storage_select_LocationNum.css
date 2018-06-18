@@ -1,0 +1,15 @@
+﻿#dialogSelectLocationNum {
+    z-index: 1050;
+}
+
+#dialogSelectLocationNum.modal.modal-wide .modal-dialog {
+    width: 95%;
+}
+
+#dialogLabconnFind.modal-wide .modal-body{
+    overflow-y: auto;
+}
+
+.columnAction {
+    text-align: center;
+}

@@ -1,0 +1,338 @@
+﻿@model SpecLab.FrontEnd.Models.SpecImport.SpecImportCreateModel
+
+@{
+    ViewBag.Title = "Nhập mẫu";
+}
+
+@section style {
+    @Styles.Render("~/Content/pages/spec_import.css", "~/Content/pages/storage_select_LocationNum.css")
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/pages/spec_import_create.js")
+}
+
+<script type="text/javascript">
+    window.searchLabconnUrl = "@Url.Action("SearchLabconn", "SpecImport")";
+    window.importUrl = "@Url.Action("Import", "SpecImport")";
+    window.printUrl = "@Url.Action("Print", "SpecImport")";
+    window.findTubeUrl = "@Url.Action("Search", "SpecControl")";
+
+    window.currentInput = "@Model.CurrentTimeDisplay";
+    window.todaySearch = "@Model.TodayDisplay";
+
+    window.sexSelectList = @SpecLab.FrontEnd.WebUtils.RenderJSON(@Model.SexSelectItems);
+    window.sampleTypeList = @SpecLab.FrontEnd.WebUtils.RenderJSON(@Model.SampleTypeList);
+</script>
+
+<div id="mainContentDisplay" class="col-md-10" ng-app="myApp" ng-controller="SpecsImportController">
+                    
+    <!-- Modal Labconn Find -->
+    <div class="modal modal-wide fade" id="dialogLabconnFind" tabindex="-1" role="dialog" aria-labelledby="dialogLabconnFindLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-warning">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="dialogLabconnFindLabel">Tìm mã bệnh phẩm trên Labconn</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-group" id="collapseLabconnFindContent">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapseLabconnFind_Info">
+                                    Thông tin tìm kiếm
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseLabconnFind_Info" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <form role="form" ng-submit="searchLabconn()">
+                                    
+                                    <div class="row">
+                                        
+                                        <div class="col-md-2"><label for="dialogLabconnFind_txtSequence">Thứ tự</label></div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="dialogLabconnFind_txtSequence" ng-model="labconnFind.sequence" value="{{labconnFind.sequence}}" />
+                                        </div>
+
+                                        <div class="col-md-2"><label for="dialogLabconnFind_txtDateInput">Ngày nhập</label></div>
+                                        <div class="col-md-4">
+                                            <div class="input-group date">
+                                                <input type="text" class="form-control datepicker-input" id="dialogLabconnFind_txtDateInput" ng-model="labconnFind.dateInput" value="{{labconnFind.dateInput}}" /><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2"><label for="dialogLabconnFind_txtSID">SID</label></div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="dialogLabconnFind_txtSID" ng-model="labconnFind.sid" value="{{labconnFind.sid}}" />
+                                        </div>
+                                        <div class="col-md-2"><label for="dialogLabconnFind_txtPatientName">Tên bệnh nhân</label></div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="dialogLabconnFind_txtPatientName" ng-model="labconnFind.patientName" value="{{labconnFind.patientName}}" />
+                                        </div>
+                                    </div>                                    
+
+                                    <button type="submit" class="btn btn-warning" >Tìm kiếm</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapseLabconnFind_ListResult">
+                                    Kết quả tìm kiếm
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseLabconnFind_ListResult" class="panel-collapse collapse in">
+                            <div class="panel-body table-responsive">
+                                <table class="table table-hover table-curved"> 
+                                    <thead>
+                                        <tr class="info">
+                                            <th>#</th>
+                                            <th>SID</th>
+                                            <th>Tên bệnh nhân</th>
+                                            <th>Giới tính</th>
+                                            <th>Năm sinh</th>
+                                            <th>Ngày nhập</th>
+                                            <th>Nguồn</th>
+                                            <th class="columnAction">Chọn</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-show="labconnFindResult.length == 0">
+                                            <td colspan="8">
+                                                <h4 class="text-warning text-center">
+                                                    Không có dữ liệu
+                                                </h4>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="labItem in labconnFindResult">
+                                            <td>{{$index + 1}}</td>
+                                            <td>{{labItem.sid}}</td>
+                                            <td>{{labItem.patientName}}</td>
+                                            <td>{{labItem.sex}}</td>
+                                            <td>{{labItem.yearOfBirth}}</td>
+                                            <td>{{labItem.dateInput}}</td>
+                                            <td>{{labItem.locationId}}</td>
+                                            <td class="columnAction">
+                                                <button type="button" class="btn btn-info" data-dismiss="modal" ng-click="labconnChoose(labItem)">Chọn</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal">Đóng</button>
+            </div>
+        </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- Chọn vị trí mẫu lưu -->
+    <div class="modal modal-wide fade" id="dialogSelectLocationNum" tabindex="-1" role="dialog" aria-labelledby="dialogLabconnFindLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header btn-warning">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="dialogLabconnFindLabel">KHAY LƯU MẪU</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapseLabconnFind_ListResult">
+                                        Chọn vị trí mẫu được lưu
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <table class="table table-hover table-curved">
+                                        <thead id="theadstorage">
+                                        </thead>
+                                        <tbody id="tbodystorage">
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapseLabconnFind_ListResult">
+                                        Ký hiệu màu trạng thái vị trí lưu
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="col-lg-12" style="margin: 10px;">
+                                <div class="col-lg-1"><div class="circle2"><p class="centertext_in_Comment_Null_export">Trống</p></div></div>
+                                @*<div class="col-lg-1"><div class="circle0"><p class="centertext_in_Comment">Mẫu tốt</p></div></div>*@
+                                <div class="col-lg-1"><div class="circle1"><p class="centertext_in_Comment">Đang xuất</p></div></div>
+                                <div class="col-lg-1"><div class="circle5"><p class="centertext_in_Comment">Trong kho</p></div></div>
+                                <div class="col-lg-1"><div class="circle3"><p class="centertext_in_Comment">Hỏng</p></div></div>
+                                <div class="col-lg-1"><div class="circle4"><p class="centertext_in_Comment">Hết</p></div></div>
+                                <div class="col-lg-1"><div class="circle6"><p class="centertext_in_Comment">Quá lần</p></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Đóng</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+         
+    <form role="form" ng-submit="saveTubeList()">
+    <div class="panel-group" id="collapseSpecsContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseSpecsContent_Search">
+                        Thông tin nhập mẫu
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSpecsContent_Search" class="panel-collapse collapse in">
+                                
+                <div class="panel-body">
+                                    
+                    <div class="row" style="margin-left: 10px;">
+                        <button type="button" class="btn btn-warning" ng-click="showLabconnFind()" ng-show="!specImport.importSuccessful">Tìm trên Labconn</button>
+                        <button type="submit" class="btn btn-default" ng-show="!specImport.importSuccessful">Lưu thông tin</button>
+
+                        <a href="{{getPrintUrl(specImport.specId)}}" class="btn btn-primary active" role="button" target="_blank" ng-show="specImport.importSuccessful">In phiếu</a>
+                        <button type="button" class="btn btn-info" ng-show="specImport.importSuccessful" ng-click="newImport()">Tạo phiếu mới</button>
+                    </div>
+
+                    <hr/>
+                    
+                    <div class="validation-summary-errors" >
+                        <ul>
+                            <li ng-show="specImport.errorDuplicateLocation">Trùng vị trí lưu trữ.</li>
+                            <li ng-show="specImport.errorLocationZero">Vị trí lưu trữ phải là số và lớn hơn 0.</li>
+                            <li ng-show="specImport.errorLocationOutbound">Vị trí lưu trữ mẫu nằm ngoài khung giới hạn.</li>
+                            <li ng-show="specImport.errorNoTube">Không nhập số lượng mẫu</li>
+                            <li ng-show="specImport.errorImportTubeEmptyVolume">Thể tích ống mẫu trống.</li>
+                            <li ng-show="specImport.errorInvalidLocationNum">Giá trị vị trí lưu không hợp lệ.</li>
+                            <li ng-show="specImport.importSuccessful">Nhập mẫu {{specImport.specId}} thành công.</li>
+                            <li ng-show="specImport.bussinessError != ''">{{specImport.bussinessError}}</li>
+                        </ul>
+                    </div>
+                    
+                    <div ng-show="!specImport.importSuccessful">
+                        <div class="row">
+                            <div class="col-md-2"><label for="txtSpecId">Mã bệnh phẩm</label></div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="txtSpecId" ng-model="specImport.specId" value="{{specImport.specId}}" autofocus="" maxlength="20" ng-change="refreshTubeId()" required=""/>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                        
+                            <div class="col-md-2"><label for="txtPatientName">Tên bệnh nhân</label></div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="txtPatientName" ng-model="specImport.patientName" value="{{specImport.patientName}}" maxlength="20" required />
+                            </div>
+
+                            <div class="col-md-2"><label for="txtSex">Giới tính</label></div>
+                            <div class="col-md-4">
+                                <select class="form-control" id="txtSex" ng-model="specImport.sex" ng-options="obj.Code as obj.Description for obj in sexSelectList">
+                        
+                                </select>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-2"><label for="txtYearOfBirth">Năm sinh</label></div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="txtYearOfBirth" ng-model="specImport.yearOfBirth" value="{{specImport.yearOfBirth}}" maxlength="4"/>
+                            </div>
+
+                            <div class="col-md-2"><label for="txtSource">Nguồn</label></div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="txtSource" ng-model="specImport.source" value="{{specImport.source}}" maxlength="20"/>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-2"><label for="txtNumTube">Số lượng mẫu</label></div>
+                            <div class="col-md-4"><input type="text" class="form-control" id="txtNumTube" ng-model="specImport.tubeNumber" value="{{specImport.tubeNumber}}" ng-blur="changeNumOfTube()" maxlength="1" /></div>
+                            <div class="col-md-2"><label for="txtInputDateTime">Thời gian nhập</label></div>
+                            <div class="col-md-4"><input type="text" class="form-control" id="txtInputDateTime" ng-model="specImport.dateInput" value="{{specImport.dateInput}}" readonly="readonly" /></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div ng-show="!specImport.importSuccessful">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapseSpecsContent_Result">
+                            Danh mục ống xét nghiệm
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseSpecsContent_Result" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                                                                  
+                        <div ng-repeat="tube in tubeList" tube-list-change>
+                        
+                            <hr />
+                            
+                            <div class="validation-summary-errors" >
+                                <ul>
+                                    <li ng-show="tube.errorDuplicateLocation">Trùng vị trí lưu trữ.</li>
+                                    <li ng-show="tube.errorLocationZero">Vị trí lưu trữ phải là số và lớn hơn 0.</li>
+                                    <li ng-show="tube.errorLocationOutbound">Vị trí lưu trữ mẫu nằm ngoài khung giới hạn.</li>
+                                    <li ng-show="tube.errorImportTubeEmptyVolume">Thể tích ống mẫu trống.</li>
+                                </ul>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2"><label for="tubeInfo_{{$index + 1}}_txtTubeNum">Thứ tự ống</label></div>
+                                <div class="col-md-4"><input type="text" class="form-control" id="tubeInfo_{{$index + 1}}_txtTubeNum" ng-model="tube.tubeNum" value="{{tube.tubeNum}}" readonly="readonly" /></div>
+                                <div class="col-md-2"><label for="tubeInfo_{{$index + 1}}_txtTubeId">Mã ống</label></div>
+                                <div class="col-md-4"><input type="text" class="form-control" id="tubeInfo_{{$index + 1}}_txtTubeId" ng-model="tube.tubeId" value="{{tube.tubeId}}" readonly="readonly" /></div>
+                            </div>
+                                    
+                            <div class="row">
+                                <div class="col-md-2"><label for="tubeInfo_{{$index + 1}}_txtTubeVolume">Thể tích (ml)</label></div>
+                                <div class="col-md-4"><input type="text" class="form-control volume_input" id="tubeInfo_{{$index + 1}}_txtTubeVolume" ng-model="tube.volume" value="{{tube.volume}}" required="" maxlength="10"/></div>
+                                <div class="col-md-2"><label for="txtSampleType">Loại mẫu</label></div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="tubeInfo_{{$index + 1}}_cmbSampleType" ng-model="tube.sampleType" ng-options="obj.Code as obj.Description for obj in sampleTypeList">
+                        
+                                    </select>
+                                </div>
+                            </div>
+                                    
+                            <div class="row">
+                                <div class="col-md-2"><label for="tubeInfo_{{$index + 1}}_cmbStorageId">Mã lưu trữ</label></div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tubeInfo_{{$index + 1}}_cmbStorageId" ng-model="tube.storageId" value="{{tube.storageId}}" required="" maxlength="20"/>
+                                </div>
+                                        
+                                <div class="col-md-2"><label for="tubeInfo_{{$index + 1}}_txtLocationNum">Vị trí</label></div>
+                                <div class="col-md-4"><input type="text" class="form-control location_input" id="tubeInfo_{{$index + 1}}_txtLocationNum" ng-model="tube.locationNum" value="{{tube.locationNum}}" required="" maxlength="10"/><button type="button" class="btn btn-primary" ng-click="ViewCheckLocationNum(tube);">Tìm</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>

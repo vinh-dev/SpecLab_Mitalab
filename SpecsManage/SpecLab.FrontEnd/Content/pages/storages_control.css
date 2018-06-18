@@ -1,0 +1,27 @@
+#collapseSpecsContent_Search .btnEditStorage, 
+#collapseSpecsContent_Search .btnRemoveStorage {
+    display: inherit;
+}
+
+#collapseSpecsContent_Search .btnCancelEditStorage, 
+#collapseSpecsContent_Search .btnSaveStorage {
+    display: none;
+}
+
+#collapseSpecsContent_Search .editing .btnEditStorage, 
+#collapseSpecsContent_Search .editing .btnRemoveStorage {
+    display: none;
+}
+
+#collapseSpecsContent_Search .editing .btnCancelEditStorage, 
+#collapseSpecsContent_Search .editing .btnSaveStorage {
+    display: inherit;
+}
+
+.errorStorageId {
+    display:none;
+}
+
+.has-error .errorStorageId {
+    display:inherit;
+}

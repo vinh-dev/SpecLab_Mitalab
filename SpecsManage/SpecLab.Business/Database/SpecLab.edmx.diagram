@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="843c398c863f4122a82a0544f87bd1b2" Name="Diagram1" ZoomLevel="94">
+        <EntityTypeShape EntityType="SpecLabModel.Export" Width="1.5" PointX="9.08014549365274" PointY="21.988982821809586" />
+        <EntityTypeShape EntityType="SpecLabModel.Import" Width="1.5" PointX="9.8651190017653256" PointY="20.1265703980469" />
+        <EntityTypeShape EntityType="SpecLabModel.Removal" Width="1.5" PointX="11.140195319028662" PointY="9.7572901890414254" />
+        <EntityTypeShape EntityType="SpecLabModel.Storage" Width="1.5" PointX="9.5124073929676811" PointY="25.699936252878949" IsExpanded="true" />
+        <EntityTypeShape EntityType="SpecLabModel.UserHistory" Width="1.5" PointX="5.2322194153593014" PointY="24.7609886940387" />
+        <EntityTypeShape EntityType="SpecLabModel.UserInfo" Width="1.5" PointX="3.3524716139549726" PointY="13.006635984874627" />
+        <EntityTypeShape EntityType="SpecLabModel.UserRight" Width="1.5" PointX="6.8791095758225342" PointY="25.907267701768905" />
+        <AssociationConnector Association="SpecLabModel.FK_UserRights_UserInfo" />
+        <EntityTypeShape EntityType="SpecLabModel.SampleSpec" Width="1.5" PointX="6.5417461928640241" PointY="3.3751664922457034" />
+        <EntityTypeShape EntityType="SpecLabModel.viewExportHistory" Width="1.5" PointX="7.87149578699446" PointY="27.742731464906935" />
+        <EntityTypeShape EntityType="SpecLabModel.TubeSample" Width="1.5" PointX="4.223503518953688" PointY="26.567056876871295" />
+        <AssociationConnector Association="SpecLabModel.FK_TubeSample_SampleSpec" />
+        <AssociationConnector Association="SpecLabModel.FK_TubeSample_Storage" />
+        <EntityTypeShape EntityType="SpecLabModel.viewSampleStatistic" Width="1.5" PointX="11.68035459131019" PointY="22.454518656458017" />
+        <EntityTypeShape EntityType="SpecLabModel.viewStorageStatistic" Width="1.5" PointX="10.381558845928666" PointY="14.834992579573296" />
+        <EntityTypeShape EntityType="SpecLabModel.ExportDetail" Width="1.5" PointX="1.625" PointY="13.75" />
+        <EntityTypeShape EntityType="SpecLabModel.ImportDetail" Width="1.5" PointX="0.24400295701064306" PointY="14.94435682098584" />
+        <EntityTypeShape EntityType="SpecLabModel.RemovalDetail" Width="1.5" PointX="6.7147548267220873" PointY="21.024766365543364" />
+        <AssociationConnector Association="SpecLabModel.FK_ExportDetail_Export" />
+        <AssociationConnector Association="SpecLabModel.FK_ExportDetail_TubeSample" />
+        <AssociationConnector Association="SpecLabModel.FK_ImportDetail_Import" />
+        <AssociationConnector Association="SpecLabModel.FK_ImportDetail_TubeSample" />
+        <AssociationConnector Association="SpecLabModel.FK_RemovalDetail_Removal" />
+        <AssociationConnector Association="SpecLabModel.FK_RemovalDetail_TubeSample" />
+        <EntityTypeShape EntityType="SpecLabModel.SampleHistory" Width="1.5" PointX="7.7623199279244606" PointY="14.208492956221333" />
+        <AssociationConnector Association="SpecLabModel.FK_SampleHistory_Storage" />
+        <AssociationConnector Association="SpecLabModel.FK_SampleHistory_TubeSample" />
+        <EntityTypeShape EntityType="SpecLabModel.Content" Width="1.5" PointX="11.625" PointY="26.5" />
+        <EntityTypeShape EntityType="SpecLabModel.Header" Width="1.5" PointX="0.75" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

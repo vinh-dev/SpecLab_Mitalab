@@ -1,0 +1,195 @@
+﻿@using SpecLab.Business.BusinessEnum
+@using SpecLab.FrontEnd
+@model SpecLab.FrontEnd.Models.UsersControl.UsersControlModel
+
+@{
+    ViewBag.Title = "Quản lý người dùng";
+}
+
+@section style {
+    @Styles.Render("~/Content/pages/users_control.css")
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/pages/users_control.js")
+}
+
+<script type="text/javascript">
+    window.listUrl = "@Url.Action("List", "UsersControl")";
+    window.updateUrl = "@Url.Action("Update", "UsersControl")";
+    window.addUrl = "@Url.Action("Add", "UsersControl")";
+    window.resetPassUrl = "@Url.Action("ResetPass", "UsersControl")";
+    window.deleteUrl = "@Url.Action("Delete", "UsersControl")";
+    window.listRightUrl = "@Url.Action("ListRight", "UsersControl")";
+    window.updateRightUrl = "@Url.Action("UpdateRight", "UsersControl")";
+    
+    window.rightList = @SpecLab.FrontEnd.WebUtils.RenderJSON(SpecLab.FrontEnd.WebUtils.GetRightSelectList());
+</script>
+
+<div id="mainContentDisplay" class="col-md-10" ng-app="myApp" ng-controller="UserControlController">
+
+    <!-- Modal Reset Password -->
+    <div class="modal modal-wide fade" id="dialogResetPass" tabindex="-1" role="dialog" aria-labelledby="dialogResetPassLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-warning">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="H1">Thay đổi mật khẩu</h4>
+            </div>
+            <form class="form-signin" role="form" ng-submit="changePassUserSubmit()">
+                <div class="validation-summary-errors" >
+                    <ul>
+                        <li ng-show="changePass.successful == true">Thay đổi mật khẩu thành công</li>
+                    </ul>
+                </div>
+                
+                <div ng-show="changePass.successful == false">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4"><label for="dialogResetPass_txtNewPassword">Mật khẩu mới</label></div>
+                            <div class="col-md-8"><input type="password" class="form-control" id="dialogResetPass_txtNewPassword" ng-model="changePass.newPass" value="{{changePass.newPass}}" /></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4"><label for="dialogResetPass_txtConfirmPassword">Nhập lại mật khẩu</label></div>
+                            <div class="col-md-8"><input type="password" class="form-control" id="dialogResetPass_txtConfirmPassword" ng-model="changePass.confirmPass" value="{{changePass.confirmPass}}" /></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default btn-primary" ng-show="changePass.successful == false">Thay đổi mật khẩu</button>
+                    <button type="button" class="btn" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- Modal Change Rights -->
+    <div class="modal modal-wide fade" id="dialogUpdateRights" tabindex="-1" role="dialog" aria-labelledby="dialogUpdateRightsLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-warning">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="H2">Thay đổi phân quyền</h4>
+            </div>
+            <div class="modal-body">
+                
+                <div class="validation-summary-errors" >
+                    <ul>
+                        <li ng-show="selectedUser.updateRightSuccess == true">Cập nhật quyền thành công</li>
+                    </ul>
+                </div>
+
+                <div ng-show="selectedUser.updateRightSuccess == false">
+                    <div class="row">
+                        <div class="col-md-3"><label for="dialogUpdateRights_txtDateInput">Người dùng</label></div>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="dialogHistorySpecs_txtDateInput" value="{{selectedUser.userId}} : {{selectedUser.userName}}" readonly="readonly" />
+                        </div>
+				    </div>
+								
+                    <div class="row">
+                        <hr />
+                        <div class="col-md-12">
+                            <table class="table table-hover table-curved"> 
+                                <thead>
+                                    <tr class="info">
+                                        <th>#</th>
+                                        <th>Quyền</th>
+                                        <th>Cho phép</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="right in rightList" >
+                                        <td>{{$index + 1}}</td>
+                                        <td>
+                                            {{right.rightId}} - {{right.rightNameDisplay}}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="form-control" ng-model="right.selected"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" ng-show="selectedUser.updateRightSuccess == false" ng-click="updateRights()">Cập nhật</button>
+                <button type="button" class="btn" data-dismiss="modal">Đóng</button>
+            </div>
+        </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="panel-group" id="collapseSpecsContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseSpecsContent_Search">
+                        Thông tin danh sách người dùng
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSpecsContent_Search" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <form role="form">
+                                        
+                        <button type="button" class="btn btn-default" ng-click="addNewUser()">Thêm mới</button>
+                        <hr />
+
+                        <table class="table table-hover table-curved"> 
+                            <thead>
+                                <tr class="info">
+                                    <th>#</th>
+                                    <th>Mã user</th>
+                                    <th>Tên user</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-show="userList.length == 0">
+                                    <td colspan="8">
+                                        <h4 class="text-warning text-center">
+                                            Không có dữ liệu
+                                        </h4>
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="user in userList" id="dataRowUser_{{$index}}" ng-class="{'editing': user.editing}" >
+                                    <td>{{$index + 1}}</td>
+                                    <td ng-class="{'has-error': user.userIdError}">
+                                        <input type="text" class="form-control" id="txtUserId_{{$index}}" ng-model="user.userId" value="{{user.userId}}" ng-readonly="!user.isNew" maxlength="20" />
+
+                                        <label class="control-label errorUserId" for="txtUserId_{{$index}}">Mã user không được trống và bị trùng lắp với các mã khác</label>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control txtEditLocationNum" id="txtEditLocationNum_{{$index}}" ng-model="user.editUserName" value="{{user.editUserName}}" ng-readonly="!user.editing" maxlength="20" ng-trim="false"/>
+                                    </td>
+                                    <td class="columnAction">
+                                        <button type="button" id="btnEditUser_{{$index}}" class="btn btn-default btnEditUser" ng-click="editUser(user)">Đổi tên</button>
+                                        @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00201))
+                                        {
+                                            <button type="button" id="btnChangePass_{{$index}}" class="btn btn-info btnChangePass" ng-click="changePassUser(user)">Đổi mật khẩu</button>
+                                        }
+                                        
+                                        @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00202))
+                                        {
+                                            <button type="button" id="btnChangeRights_{{$index}}" class="btn btn-warning btnChangeRights" ng-click="changeRights(user)">Phân quyền</button>
+                                        }                                        
+                                        <button type="button" id="btnRemoveUser_{{$index}}" class="btn btn-danger btnRemoveUser" ng-click="removeUser(user)">Xóa</button>
+
+                                        <button type="button" id="btnSaveUser_{{$index}}"class="btn btn-success btnSaveUser" ng-click="saveUser(user)">Lưu thay đổi</button>
+                                        <button type="button" id="btnCancelEditUser_{{$index}}" class="btn btn-warning btnCancelEditUser" ng-click="cancelEditUser(user)">Hủy lưu</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

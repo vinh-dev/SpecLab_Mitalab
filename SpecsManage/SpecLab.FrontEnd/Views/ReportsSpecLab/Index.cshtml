@@ -1,0 +1,63 @@
+﻿@model SpecLab.FrontEnd.Models.ReportsModel
+
+@{
+    ViewBag.Title = "Thống kê";
+}
+
+@section style {
+    
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/pages/report.js")
+}
+
+<script type="text/javascript">
+    window.exportHistoryDefaultStartDate = "@Model.ExportHistoryDefaultStartDate";
+    window.exportHistoryDefaultEndDate = "@Model.ExportHistoryDefaultEndDate";
+</script>
+
+<div id="mainContentDisplay" class="col-md-10" ng-app="myApp" ng-controller="ReportsSpecLabController">
+    <div class="panel-group" id="collapseHomeContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseHomeContent_Search">
+                        Danh sách báo cáo thống kê
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseHomeContent_Search" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("StorageStatistics", "ReportsSpecLab")" target="_blank">Thống kê vị trí đang sử dụng.</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("SampleStatistics", "ReportsSpecLab")" target="_blank">Thống kê tổng hợp.</a>
+                        </li>
+                        <li>
+                            <a ng-href="@Url.Action("ExportHistory", "ReportsSpecLab")/{{convertDateUniversalStr(exportHistory.fromDate)}}-{{convertDateUniversalStr(exportHistory.toDate)}}" target="_blank">Thống kê mẫu đã xuất.</a>
+                            
+                            <div class="row">
+                                <div class="col-md-2"><label for="txtSearchInputFrom">Xuất từ</label></div>
+                                <div class="col-md-4">
+                                    <div class="input-group date">
+                                        <input type="text" id="txtSearchInputFrom" class="form-control datepicker-input" ng-model="exportHistory.fromDate" value="{{exportHistory.fromDate}}" /><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span> 
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-2"><label for="txtSearchInputFrom">đến</label></div>
+                                <div class="col-md-4">
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control datepicker-input" ng-model="exportHistory.toDate" value="{{exportHistory.toDate}}" /><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

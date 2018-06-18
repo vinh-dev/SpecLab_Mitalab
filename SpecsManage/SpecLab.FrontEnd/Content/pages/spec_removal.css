@@ -1,0 +1,28 @@
+.table .columnAction {
+    text-align: center;
+}
+
+.table .columnNumberRemoval {
+    text-align: right;
+}
+
+#dialogFindTubeToRemoval {
+    z-index: 1052;
+}
+
+#dialogFindTubeToRemoval .selectRemovalCol {
+    width: 50px;
+}
+
+#dialogRemovalDetail.modal.modal-wide .modal-dialog,
+#dialogCreateRemoval.modal.modal-wide .modal-dialog, 
+#dialogFindTubeToRemoval.modal.modal-wide .modal-dialog {
+    width: 90%;
+}
+
+#dialogExportDetail.modal-wide .modal-body,
+#dialogCreateExport.modal-wide .modal-body,
+#dialogFindTubeToRemoval.modal-wide .modal-body {
+    overflow-y: auto;
+}
+

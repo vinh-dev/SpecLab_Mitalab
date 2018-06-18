@@ -1,0 +1,109 @@
+﻿@model SpecLab.FrontEnd.Models.StoragesControl.StoragesControlModel
+
+@{
+    ViewBag.Title = "Quản lý lưu trữ";
+}
+
+@section style {
+    @Styles.Render("~/Content/pages/storages_control.css")
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/pages/storages_control.js")
+}
+
+<script type="text/javascript">
+    window.listUrl = "@Url.Action("List", "StoragesControl")";
+    window.addUrl = "@Url.Action("Add", "StoragesControl")";
+    window.updateUrl = "@Url.Action("Update", "StoragesControl")";
+    window.deleteUrl = "@Url.Action("Delete", "StoragesControl")";
+</script>
+
+<div id="mainContentDisplay" class="col-md-10" ng-app="myApp" ng-controller="StorageControlController">
+
+    <div class="panel-group" id="collapseSpecsContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseSpecsContent_Search">
+                        Thông tin danh mục lưu trữ
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSpecsContent_Search" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <form role="form">
+
+                        <button type="button" class="btn btn-default" ng-click="addNewStorage()">Thêm mới</button>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-2"><label for="dialogImportDetail_txtNumberImport">Mã hộp lưu trữ</label></div>
+                            <div class="col-md-4"><input type="text" class="form-control" id="txtStorageFilter" ng-model="storagefilter" value="{{storagefilter}}" /></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-default" ng-click="refreshStorageList()">Tìm</button></div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" style="margin-bottom:0">
+                                <thead>
+                                    <tr class="info">
+                                        <th>#</th>
+                                        <th>Mã hộp lưu trữ</th>
+                                        <th>Số vị trí</th>
+                                        <th>Hàng</th>
+                                        <th>Cột</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-show="storageList.length == 0">
+                                        <td colspan="8">
+                                            <h4 class="text-warning text-center">
+                                                Không có dữ liệu
+                                            </h4>
+                                        </td>
+                                    </tr>
+                                    <tr ng-repeat="storage in storageList" id="dataRowStorage_{{$index}}" ng-class="{'editing': storage.editing}" storage-list-change>
+                                        @*<td>{{$index + 1}}</td>*@
+                                        <td>{{storage.STT}}</td>
+                                        <td ng-class="{'has-error': storage.storageIdError}">
+                                            <input type="text" class="form-control" id="txtStorageId_{{$index}}" ng-model="storage.storageId" value="{{storage.storageId}}" ng-readonly="!storage.isNew" maxlength="20" />
+
+                                            <label class="control-label errorStorageId" for="txtStorageId_{{$index}}">Mã hộp lưu trữ không được trống và bị trùng lắp với các mã khác</label>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control txtEditLocationNum" id="txtEditLocationNum_{{$index}}" ng-model="storage.editLocationNum" value="{{storage.
+                                               }}" ng-readonly="!storage.editing" maxlength="10" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control txtEditNumRows" id="txtEditNumRows_{{$index}}" ng-model="storage.editNumRows" value="{{storage.
+                                               }}" ng-readonly="!storage.editing" maxlength="10" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control txtEditNumColumn" id="txtEditNumColumn_{{$index}}" ng-model="storage.editNumColumn" value="{{storage.
+                                               }}" ng-readonly="!storage.editing" maxlength="10" />
+                                        </td>
+                                        <td>
+                                            <button type="button" id="btnEditStorage_{{$index}}" class="btn btn-warning btnEditStorage" ng-click="editStorage(storage)">Thay đổi</button>
+                                            <button type="button" id="btnRemoveStorage_{{$index}}" class="btn btn-danger btnRemoveStorage" ng-click="removeStorage(storage)">Xóa</button>
+
+                                            <button type="button" id="btnSaveStorage_{{$index}}" class="btn btn-success btnSaveStorage" ng-click="saveStorage(storage)">Lưu thay đổi</button>
+                                            <button type="button" id="btnCancelEditStorage_{{$index}}" class="btn btn-warning btnCancelEditStorage" ng-click="cancelEditStorage(storage)">Hủy lưu</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label ng-model="rowdataview">Số dòng hiển thị: {{rowdataview}}</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <pagination style="float:right" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

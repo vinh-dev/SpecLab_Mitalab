@@ -1,0 +1,75 @@
+﻿@using SpecLab.Business
+@using SpecLab.Business.BusinessEnum
+@model SpecLab.FrontEnd.Models.ChangePass.ChangePassModel
+
+@{
+    ViewBag.Title = "Đổi mật khẩu";
+}
+
+@section style {
+    @Styles.Render("~/Content/pages/change_pass.css")
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/pages/change_pass.js")
+}
+
+<script type="text/javascript">
+    window.changePassUrl = "@Url.Action("Change", "ChangePass")";
+</script>
+
+<div id="mainContentDisplay" class="col-md-10" ng-app="myApp" ng-controller="ChangePassController">                    
+
+    <div class="panel-group" id="collapseChangePass">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseChangePass_Search">
+                        Đổi mật khẩu
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseChangePass_Search" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    
+                    <form class="form-signin" role="form" ng-submit="submitChange()">
+                        
+                        <div class="validation-summary-errors" >
+                            <ul>
+                                <li ng-show="confirmPassword != '' && newPassword != confirmPassword">@EnumUtils.GetEnumDescription(ErrorCode.VerifyPasswordNotMatch)</li>
+                                <li ng-show="errorMessage != ''">{{errorMessage}}</li>
+                                <li ng-show="successChange == true">Thay đổi mật khẩu thành công</li>
+                            </ul>
+                        </div>
+                        
+                        <div ng-show="successChange == false">
+                            <div class="row">
+                                <div class="col-md-4"><label for="txtOldPassword">Mật khẩu cũ</label></div>
+                                <div class="col-md-8">
+                                    <input type="password" class="form-control" ng-model="oldPassword" id="txtOldPassword" placeholder="Mật khẩu cũ" required autofocus ng-trim='false' maxlength="20"/>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4"><label for="txtNewPassword">Mật khẩu mới</label></div>
+                                <div class="col-md-8">
+                                    <input type="password" class="form-control" ng-model="newPassword" ng-change="validate()" id="txtNewPassword" placeholder="Mật khẩu mới" required ng-trim='false' maxlength="20"/>
+                                </div>
+                            </div>
+                                        
+                            <div class="row">
+                                <div class="col-md-4"><label for="txtNewPasswordConfirm">Xác nhận mật khẩu</label></div>
+                                <div class="col-md-8">
+                                    <input type="password" class="form-control"  ng-model="confirmPassword" ng-change="validate()" id="txtNewPasswordConfirm" placeholder="Xác nhận mật khẩu" required ng-trim='false' maxlength="20"/>
+                                </div>
+                            </div>
+                        
+                            <button type="submit" class="btn btn-default">Đổi mật khẩu</button>
+                            <button type="reset" class="btn">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

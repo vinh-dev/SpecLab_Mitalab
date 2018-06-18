@@ -1,0 +1,218 @@
+﻿@model SpecLab.FrontEnd.Models.SpecRemoval.SpecRemovalSearchModel
+
+@{
+    ViewBag.Title = "Lịch sử hủy";
+}
+
+@section style {
+    @Styles.Render("~/Content/spec_removal")
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/pages/spec_removal.js")
+}
+
+<script type="text/javascript">
+
+    window.defaultSearchValue = {
+        fromDate: "@Model.StartSearchDateString",
+        toDate: "@Model.EndSearchDateString",
+    };
+    
+    window.searchUrl = "@Url.Action("Search", "SpecRemoval")";
+    window.detailUrl = "@Url.Action("Detail", "SpecRemoval")";
+    window.printUrl = "@Url.Action("Print", "SpecRemoval")";
+</script>
+
+<div id="mainContentDisplay" class="col-md-10" ng-app="myApp" ng-controller="StorageRemovalController">
+                    
+    <!-- Modal Removal Detail -->
+    <div class="modal modal-wide fade" id="dialogRemovalDetail" tabindex="-1" role="dialog" aria-labelledby="dialogRemovalDetailLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-warning">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="dialogRemovalDetailLabel">Chi tiết phiếu hủy</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-group" id="collapseHistoryContent">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapseHistory_Info">
+                                    Thông tin chung
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseHistory_Info" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-2"><label for="dialogRemovalDetail_txtRemovalId">Mã hủy</label></div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" id="dialogRemovalDetail_txtRemovalId" ng-model="selectedRemoval.RemovalId" value="{{selectedRemoval.RemovalId}}" readonly="readonly" />
+                                    </div>
+                                                    
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-2"><label for="dialogRemovalDetail_txtNumberRemoval">Số lượng mẫu</label></div>
+                                    <div class="col-md-4"><input type="text" class="form-control" id="dialogRemovalDetail_txtNumberRemoval" ng-model="selectedRemoval.NumberRemoval" value="{{selectedRemoval.NumberRemoval}}" readonly="readonly"/></div>
+                                    <div class="col-md-2"><label for="dialogRemovalDetail_txtRemovalDate">Ngày hủy</label></div>
+                                    <div class="col-md-4"><input type="text" class="form-control" id="dialogRemovalDetail_txtRemovalDate" ng-model="selectedRemoval.RemovalDate" value="{{selectedRemoval.RemovalDate}}" readonly="readonly" /></div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-2"><label for="dialogRemovalDetail_txtRemovalUser">Người hủy</label></div>
+                                    <div class="col-md-10"><input type="text" class="form-control" id="dialogRemovalDetail_txtRemovalUser" ng-model="selectedRemoval.RemovalUser" value="{{selectedRemoval.RemovalUser}}" readonly="readonly" /></div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-2"><label for="dialogRemovalDetail_txtRemovalReason">Lý do hủy</label></div>
+                                    <div class="col-md-10"><input type="text" class="form-control" id="dialogRemovalDetail_txtRemovalReason" ng-model="selectedRemoval.RemovalReason" value="{{selectedRemoval.RemovalReason}}" readonly="readonly" /></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapseHistory_ListResult">
+                                    Danh sách hủy
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseHistory_ListResult" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <table class="table table-hover table-curved"> 
+                                    <thead>
+                                        <tr class="info">
+                                            <th>#</th>
+                                            <th>Mã bệnh phẩm</th>
+                                            <th>Mã ống</th>
+                                            <th>Tình trạng</th>
+                                            <th>Thể tích</th>
+                                            <th>Mã lưu trữ</th>
+                                            <th>Vị trí</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-show="selectedRemoval.TubeList.length == 0">
+                                            <td colspan="7">
+                                                <h4 class="text-warning text-center">
+                                                    Không có dữ liệu
+                                                </h4>
+                                            </td>
+                                        </tr>
+                                        <tr ng-repeat="tube in selectedRemoval.TubeList">
+                                            <td>{{$index + 1}}</td>
+                                            <td>{{tube.SampleSpecId}}</td>
+                                            <td>{{tube.TubeId}}</td>
+                                            <td>{{tube.ConditionDisplay}}</td>
+                                            <td>{{tube.VolumeDisplay}}</td>
+                                            <td>{{tube.StorageId}}</td>
+                                            <td>{{tube.LocationNum}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn" data-dismiss="modal">Đóng</button>
+            </div>
+        </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="panel-group" id="collapseSpecsContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseSpecsContent_Search">
+                        Tìm kiếm phiếu hủy
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSpecsContent_Search" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <form role="form" ng-submit="searchRemoval()">
+                                        
+                        <div class="row">
+                            <div class="col-md-2"><label for="txtSearchInputFrom">Ngày hủy từ</label></div>
+                            <div class="col-md-4">
+                                <div class="input-group date">
+                                    <input type="text" class="form-control datepicker-input" id="txtSearchInputFrom" ng-model="removalSearchCriteria.fromDate" value="{{removalSearchCriteria.fromDate}}" /><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-2"><label for="txtSearchInputTo">Ngày hủy đến</label></div>
+                            <div class="col-md-4">
+                                <div class="input-group date">
+                                    <input type="text" class="form-control datepicker-input" id="txtSearchInputTo" ng-model="removalSearchCriteria.toDate" value="{{removalSearchCriteria.toDate}}" /><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2"><label for="txtSearchRemovalId">Mã phiếu hủy</label></div>
+                            <div class="col-md-4"><input type="text" class="form-control" id="txtSearchRemovalId" ng-model="removalSearchCriteria.removalId" value="{{removalSearchCriteria.removalId}}" maxlength="20"/></div>
+                        </div>
+                        
+
+                        <button type="submit" class="btn btn-default">Tìm kiếm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+                        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseSpecsContent_Result">
+                        Kết quả tìm kiếm
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSpecsContent_Result" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <table class="table table-hover table-curved"> 
+                        <thead>
+                            <tr class="info">
+                                <th>#</th>
+                                <th>Mã hủy</th>
+                                <th>Ngày hủy</th>
+                                <th>Người hủy</th>
+                                <th>Lý do</th>
+                                <th>Số lượng</th>
+                                <th>Chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-show="removalList.length == 0">
+                                <td colspan="7">
+                                    <h4 class="text-warning text-center">
+                                        Không có dữ liệu
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="item in removalList">
+                                <td>{{$index + 1}}</td>
+                                <td>{{item.RemovalId}}</td>
+                                <td>{{item.RemovalDateDisplay}}</td>
+                                <td>{{item.RemovalUserId}}</td>
+                                <td>{{item.RemovalReason}}</td>
+                                <td class="columnNumberRemoval">{{item.NumberRemoval}}</td>
+                                <td class="columnAction">
+                                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" ng-click="showRemovalDetail(item)">Chi tiết</button>
+                                    <a href="{{getPrintUrl(item.RemovalId)}}" class="btn btn-sm btn-primary active" role="button" target="_blank">Phiếu in</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

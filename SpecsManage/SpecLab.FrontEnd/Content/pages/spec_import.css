@@ -1,0 +1,17 @@
+#dialogLabconnFind {
+    z-index: 1050;
+}
+
+#dialogLabconnFind.modal.modal-wide .modal-dialog, 
+#dialogImportDetail.modal.modal-wide .modal-dialog {
+    width: 90%;
+}
+
+#dialogLabconnFind.modal-wide .modal-body, 
+#dialogImportDetail.modal-wide .modal-body {
+    overflow-y: auto;
+}
+
+.columnAction {
+    text-align: center;
+}

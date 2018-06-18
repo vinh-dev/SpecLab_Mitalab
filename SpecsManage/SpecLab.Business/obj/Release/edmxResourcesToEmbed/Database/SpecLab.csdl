@@ -1,0 +1,488 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SpecLabModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="Entities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="Exports" EntityType="SpecLabModel.Export" />
+    <EntitySet Name="Imports" EntityType="SpecLabModel.Import" />
+    <EntitySet Name="Removals" EntityType="SpecLabModel.Removal" />
+    <EntitySet Name="Storages" EntityType="SpecLabModel.Storage" />
+    <EntitySet Name="UserHistories" EntityType="SpecLabModel.UserHistory" />
+    <EntitySet Name="UserInfoes" EntityType="SpecLabModel.UserInfo" />
+    <EntitySet Name="UserRights" EntityType="SpecLabModel.UserRight" />
+    <AssociationSet Name="FK_UserRights_UserInfo" Association="SpecLabModel.FK_UserRights_UserInfo">
+      <End Role="UserInfo" EntitySet="UserInfoes" />
+      <End Role="UserRight" EntitySet="UserRights" />
+    </AssociationSet>
+    <EntitySet Name="SampleSpecs" EntityType="SpecLabModel.SampleSpec" />
+    <EntitySet Name="viewExportHistories" EntityType="SpecLabModel.viewExportHistory" />
+    <EntitySet Name="TubeSamples" EntityType="SpecLabModel.TubeSample" />
+    <AssociationSet Name="FK_TubeSample_SampleSpec" Association="SpecLabModel.FK_TubeSample_SampleSpec">
+      <End Role="SampleSpec" EntitySet="SampleSpecs" />
+      <End Role="TubeSample" EntitySet="TubeSamples" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TubeSample_Storage" Association="SpecLabModel.FK_TubeSample_Storage">
+      <End Role="Storage" EntitySet="Storages" />
+      <End Role="TubeSample" EntitySet="TubeSamples" />
+    </AssociationSet>
+    <EntitySet Name="viewSampleStatistics" EntityType="SpecLabModel.viewSampleStatistic" />
+    <EntitySet Name="viewStorageStatistics" EntityType="SpecLabModel.viewStorageStatistic" />
+    <EntitySet Name="ExportDetails" EntityType="SpecLabModel.ExportDetail" />
+    <EntitySet Name="ImportDetails" EntityType="SpecLabModel.ImportDetail" />
+    <EntitySet Name="RemovalDetails" EntityType="SpecLabModel.RemovalDetail" />
+    <AssociationSet Name="FK_ExportDetail_Export" Association="SpecLabModel.FK_ExportDetail_Export">
+      <End Role="Export" EntitySet="Exports" />
+      <End Role="ExportDetail" EntitySet="ExportDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ExportDetail_TubeSample" Association="SpecLabModel.FK_ExportDetail_TubeSample">
+      <End Role="TubeSample" EntitySet="TubeSamples" />
+      <End Role="ExportDetail" EntitySet="ExportDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ImportDetail_Import" Association="SpecLabModel.FK_ImportDetail_Import">
+      <End Role="Import" EntitySet="Imports" />
+      <End Role="ImportDetail" EntitySet="ImportDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ImportDetail_TubeSample" Association="SpecLabModel.FK_ImportDetail_TubeSample">
+      <End Role="TubeSample" EntitySet="TubeSamples" />
+      <End Role="ImportDetail" EntitySet="ImportDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RemovalDetail_Removal" Association="SpecLabModel.FK_RemovalDetail_Removal">
+      <End Role="Removal" EntitySet="Removals" />
+      <End Role="RemovalDetail" EntitySet="RemovalDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RemovalDetail_TubeSample" Association="SpecLabModel.FK_RemovalDetail_TubeSample">
+      <End Role="TubeSample" EntitySet="TubeSamples" />
+      <End Role="RemovalDetail" EntitySet="RemovalDetails" />
+    </AssociationSet>
+    <EntitySet Name="SampleHistories" EntityType="SpecLabModel.SampleHistory" />
+    <AssociationSet Name="FK_SampleHistory_Storage" Association="SpecLabModel.FK_SampleHistory_Storage">
+      <End Role="Storage" EntitySet="Storages" />
+      <End Role="SampleHistory" EntitySet="SampleHistories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SampleHistory_TubeSample" Association="SpecLabModel.FK_SampleHistory_TubeSample">
+      <End Role="TubeSample" EntitySet="TubeSamples" />
+      <End Role="SampleHistory" EntitySet="SampleHistories" />
+    </AssociationSet>
+    <EntitySet Name="Contents" EntityType="SpecLabModel.Content" />
+    <EntitySet Name="Headers" EntityType="SpecLabModel.Header" />
+  </EntityContainer>
+  <EntityType Name="Export">
+    <Key>
+      <PropertyRef Name="ExportId" />
+    </Key>
+    <Property Type="String" Name="ExportId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="ExportDate" Nullable="false" Precision="3" />
+    <Property Type="String" Name="ExportUserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="ExportToUserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="ExportReason" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="SampleNumber" Nullable="false" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ExportDetails" Relationship="SpecLabModel.FK_ExportDetail_Export" FromRole="Export" ToRole="ExportDetail" />
+  </EntityType>
+  <EntityType Name="Import">
+    <Key>
+      <PropertyRef Name="ImportId" />
+    </Key>
+    <Property Type="String" Name="ImportId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="ImportDate" Nullable="false" Precision="3" />
+    <Property Type="String" Name="ImportUserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="SampleNumber" Nullable="false" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ImportDetails" Relationship="SpecLabModel.FK_ImportDetail_Import" FromRole="Import" ToRole="ImportDetail" />
+  </EntityType>
+  <EntityType Name="Removal">
+    <Key>
+      <PropertyRef Name="RemovalId" />
+    </Key>
+    <Property Type="String" Name="RemovalId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="RemovalDate" Nullable="false" Precision="3" />
+    <Property Type="String" Name="RemovalUserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="RemovalReason" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="SampleNumber" Nullable="false" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="RemovalDetails" Relationship="SpecLabModel.FK_RemovalDetail_Removal" FromRole="Removal" ToRole="RemovalDetail" />
+  </EntityType>
+  <EntityType Name="Storage">
+    <Key>
+      <PropertyRef Name="StorageId" />
+    </Key>
+    <Property Type="String" Name="StorageId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="NumberStorage" Nullable="false" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="TubeSamples" Relationship="SpecLabModel.FK_TubeSample_Storage" FromRole="Storage" ToRole="TubeSample" />
+    <NavigationProperty Name="SampleHistories" Relationship="SpecLabModel.FK_SampleHistory_Storage" FromRole="Storage" ToRole="SampleHistory" />
+    <Property Name="NumRows" Type="Int32" />
+    <Property Name="NumColumn" Type="Int32" />
+  </EntityType>
+  <EntityType Name="UserHistory">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Type="Int64" Name="LogId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="DateTime" Name="LogDate" Nullable="false" Precision="3" />
+    <Property Type="String" Name="UserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="Description" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="UserInfo">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Type="String" Name="UserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="Password" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="PasswordSalt" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="FullName" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="Status" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="UserRights" Relationship="SpecLabModel.FK_UserRights_UserInfo" FromRole="UserInfo" ToRole="UserRight" />
+  </EntityType>
+  <EntityType Name="UserRight">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="RightCode" />
+    </Key>
+    <Property Type="String" Name="UserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="RightCode" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="UserInfo" Relationship="SpecLabModel.FK_UserRights_UserInfo" FromRole="UserRight" ToRole="UserInfo" />
+  </EntityType>
+  <Association Name="FK_UserRights_UserInfo">
+    <End Type="SpecLabModel.UserInfo" Role="UserInfo" Multiplicity="1" />
+    <End Type="SpecLabModel.UserRight" Role="UserRight" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserInfo">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="UserRight">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="SampleSpec">
+    <Key>
+      <PropertyRef Name="SampleSpecId" />
+    </Key>
+    <Property Type="String" Name="SampleSpecId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="DateInput" Nullable="false" Precision="3" />
+    <Property Type="String" Name="Source" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="SampleNumber" />
+    <Property Type="String" Name="PatientName" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="Sex" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="Age" Nullable="false" />
+    <Property Type="String" Name="UserInput" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="TubeSamples" Relationship="SpecLabModel.FK_TubeSample_SampleSpec" FromRole="SampleSpec" ToRole="TubeSample" />
+  </EntityType>
+  <EntityType Name="viewExportHistory">
+    <Key>
+      <PropertyRef Name="TubeId" />
+      <PropertyRef Name="SampleType" />
+      <PropertyRef Name="ExportUserId" />
+      <PropertyRef Name="ExportDate" />
+      <PropertyRef Name="StorageId" />
+      <PropertyRef Name="NumberStorage" />
+      <PropertyRef Name="LocationNum" />
+    </Key>
+    <Property Type="String" Name="TubeId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="SampleType" Nullable="false" />
+    <Property Type="String" Name="ExportUserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="ExportDate" Nullable="false" Precision="3" />
+    <Property Type="String" Name="ExportReason" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="UpdateUserId" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="UpdateDate" Precision="3" />
+    <Property Type="String" Name="StorageId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="NumberStorage" Nullable="false" />
+    <Property Type="Int32" Name="LocationNum" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TubeSample">
+    <Key>
+      <PropertyRef Name="TubeId" />
+    </Key>
+    <Property Type="String" Name="TubeId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="SampleSpecId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="TubeOrder" Nullable="false" />
+    <Property Type="Int32" Name="SampleType" Nullable="false" />
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="Double" Name="Volume" Nullable="false" />
+    <Property Type="String" Name="StorageId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="LocationNum" Nullable="false" />
+    <Property Type="Int32" Name="NumberExport" Nullable="false" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="SampleSpec" Relationship="SpecLabModel.FK_TubeSample_SampleSpec" FromRole="TubeSample" ToRole="SampleSpec" />
+    <NavigationProperty Name="Storage" Relationship="SpecLabModel.FK_TubeSample_Storage" FromRole="TubeSample" ToRole="Storage" />
+    <NavigationProperty Name="ExportDetails" Relationship="SpecLabModel.FK_ExportDetail_TubeSample" FromRole="TubeSample" ToRole="ExportDetail" />
+    <NavigationProperty Name="ImportDetails" Relationship="SpecLabModel.FK_ImportDetail_TubeSample" FromRole="TubeSample" ToRole="ImportDetail" />
+    <NavigationProperty Name="RemovalDetails" Relationship="SpecLabModel.FK_RemovalDetail_TubeSample" FromRole="TubeSample" ToRole="RemovalDetail" />
+    <NavigationProperty Name="SampleHistories" Relationship="SpecLabModel.FK_SampleHistory_TubeSample" FromRole="TubeSample" ToRole="SampleHistory" />
+  </EntityType>
+  <Association Name="FK_TubeSample_SampleSpec">
+    <End Type="SpecLabModel.SampleSpec" Role="SampleSpec" Multiplicity="1" />
+    <End Type="SpecLabModel.TubeSample" Role="TubeSample" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SampleSpec">
+        <PropertyRef Name="SampleSpecId" />
+      </Principal>
+      <Dependent Role="TubeSample">
+        <PropertyRef Name="SampleSpecId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TubeSample_Storage">
+    <End Type="SpecLabModel.Storage" Role="Storage" Multiplicity="1" />
+    <End Type="SpecLabModel.TubeSample" Role="TubeSample" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Storage">
+        <PropertyRef Name="StorageId" />
+      </Principal>
+      <Dependent Role="TubeSample">
+        <PropertyRef Name="StorageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="viewSampleStatistic">
+    <Key>
+      <PropertyRef Name="SampleSpecId" />
+      <PropertyRef Name="TubeId" />
+      <PropertyRef Name="SampleType" />
+      <PropertyRef Name="Sex" />
+      <PropertyRef Name="Age" />
+      <PropertyRef Name="UserInput" />
+      <PropertyRef Name="StorageId" />
+      <PropertyRef Name="LocationNum" />
+      <PropertyRef Name="Status" />
+      <PropertyRef Name="NumberStorage" />
+      <PropertyRef Name="Volume" />
+      <PropertyRef Name="NumberExport" />
+    </Key>
+    <Property Type="String" Name="SampleSpecId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="TubeId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="SampleType" Nullable="false" />
+    <Property Type="String" Name="Sex" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="Age" Nullable="false" />
+    <Property Type="String" Name="Source" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="UserInput" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="PatientName" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="StorageId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="LocationNum" Nullable="false" />
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="Int32" Name="NumberStorage" Nullable="false" />
+    <Property Type="Double" Name="Volume" Nullable="false" />
+    <Property Type="Int32" Name="NumberExport" Nullable="false" />
+  </EntityType>
+  <EntityType Name="viewStorageStatistic">
+    <Key>
+      <PropertyRef Name="StorageId" />
+      <PropertyRef Name="LocationNum" />
+      <PropertyRef Name="TubeId" />
+      <PropertyRef Name="Status" />
+      <PropertyRef Name="NumberStorage" />
+      <PropertyRef Name="Volume" />
+      <PropertyRef Name="NumberExport" />
+    </Key>
+    <Property Type="String" Name="StorageId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="LocationNum" Nullable="false" />
+    <Property Type="String" Name="TubeId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="Int32" Name="NumberStorage" Nullable="false" />
+    <Property Type="Double" Name="Volume" Nullable="false" />
+    <Property Type="Int32" Name="NumberExport" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ExportDetail">
+    <Key>
+      <PropertyRef Name="ExportDetailId" />
+    </Key>
+    <Property Type="Int64" Name="ExportDetailId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="ExportId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="TubeId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="Double" Name="Volume" Nullable="false" />
+    <Property Type="String" Name="StorageId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="LocationNum" Nullable="false" />
+    <Property Type="Int32" Name="NumberExport" Nullable="false" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Export" Relationship="SpecLabModel.FK_ExportDetail_Export" FromRole="ExportDetail" ToRole="Export" />
+    <NavigationProperty Name="TubeSample" Relationship="SpecLabModel.FK_ExportDetail_TubeSample" FromRole="ExportDetail" ToRole="TubeSample" />
+  </EntityType>
+  <EntityType Name="ImportDetail">
+    <Key>
+      <PropertyRef Name="ImportDetailId" />
+    </Key>
+    <Property Type="Int64" Name="ImportDetailId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="ImportId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="TubeId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="Double" Name="Volume" Nullable="false" />
+    <Property Type="String" Name="StorageId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="LocationNum" Nullable="false" />
+    <Property Type="Int32" Name="NumberExport" Nullable="false" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Import" Relationship="SpecLabModel.FK_ImportDetail_Import" FromRole="ImportDetail" ToRole="Import" />
+    <NavigationProperty Name="TubeSample" Relationship="SpecLabModel.FK_ImportDetail_TubeSample" FromRole="ImportDetail" ToRole="TubeSample" />
+  </EntityType>
+  <EntityType Name="RemovalDetail">
+    <Key>
+      <PropertyRef Name="RemovalDetailId" />
+    </Key>
+    <Property Type="Int64" Name="RemovalDetailId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="RemovalId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="TubeId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="Double" Name="Volume" Nullable="false" />
+    <Property Type="String" Name="StorageId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="LocationNum" Nullable="false" />
+    <Property Type="Int32" Name="NumberExport" Nullable="false" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Removal" Relationship="SpecLabModel.FK_RemovalDetail_Removal" FromRole="RemovalDetail" ToRole="Removal" />
+    <NavigationProperty Name="TubeSample" Relationship="SpecLabModel.FK_RemovalDetail_TubeSample" FromRole="RemovalDetail" ToRole="TubeSample" />
+  </EntityType>
+  <Association Name="FK_ExportDetail_Export">
+    <End Type="SpecLabModel.Export" Role="Export" Multiplicity="1" />
+    <End Type="SpecLabModel.ExportDetail" Role="ExportDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Export">
+        <PropertyRef Name="ExportId" />
+      </Principal>
+      <Dependent Role="ExportDetail">
+        <PropertyRef Name="ExportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ExportDetail_TubeSample">
+    <End Type="SpecLabModel.TubeSample" Role="TubeSample" Multiplicity="1" />
+    <End Type="SpecLabModel.ExportDetail" Role="ExportDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TubeSample">
+        <PropertyRef Name="TubeId" />
+      </Principal>
+      <Dependent Role="ExportDetail">
+        <PropertyRef Name="TubeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ImportDetail_Import">
+    <End Type="SpecLabModel.Import" Role="Import" Multiplicity="1" />
+    <End Type="SpecLabModel.ImportDetail" Role="ImportDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Import">
+        <PropertyRef Name="ImportId" />
+      </Principal>
+      <Dependent Role="ImportDetail">
+        <PropertyRef Name="ImportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ImportDetail_TubeSample">
+    <End Type="SpecLabModel.TubeSample" Role="TubeSample" Multiplicity="1" />
+    <End Type="SpecLabModel.ImportDetail" Role="ImportDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TubeSample">
+        <PropertyRef Name="TubeId" />
+      </Principal>
+      <Dependent Role="ImportDetail">
+        <PropertyRef Name="TubeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RemovalDetail_Removal">
+    <End Type="SpecLabModel.Removal" Role="Removal" Multiplicity="1" />
+    <End Type="SpecLabModel.RemovalDetail" Role="RemovalDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Removal">
+        <PropertyRef Name="RemovalId" />
+      </Principal>
+      <Dependent Role="RemovalDetail">
+        <PropertyRef Name="RemovalId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RemovalDetail_TubeSample">
+    <End Type="SpecLabModel.TubeSample" Role="TubeSample" Multiplicity="1" />
+    <End Type="SpecLabModel.RemovalDetail" Role="RemovalDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TubeSample">
+        <PropertyRef Name="TubeId" />
+      </Principal>
+      <Dependent Role="RemovalDetail">
+        <PropertyRef Name="TubeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="SampleHistory">
+    <Key>
+      <PropertyRef Name="HistoryId" />
+    </Key>
+    <Property Type="Int64" Name="HistoryId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="TubeId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="HistoryDate" Nullable="false" Precision="3" />
+    <Property Type="Int32" Name="Action" Nullable="false" />
+    <Property Type="String" Name="UserId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Double" Name="Volume" Nullable="false" />
+    <Property Type="Int32" Name="Status" Nullable="false" />
+    <Property Type="String" Name="StorageId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="LocationNum" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="NumberExport" Nullable="false" />
+    <NavigationProperty Name="Storage" Relationship="SpecLabModel.FK_SampleHistory_Storage" FromRole="SampleHistory" ToRole="Storage" />
+    <NavigationProperty Name="TubeSample" Relationship="SpecLabModel.FK_SampleHistory_TubeSample" FromRole="SampleHistory" ToRole="TubeSample" />
+  </EntityType>
+  <Association Name="FK_SampleHistory_Storage">
+    <End Type="SpecLabModel.Storage" Role="Storage" Multiplicity="1" />
+    <End Type="SpecLabModel.SampleHistory" Role="SampleHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Storage">
+        <PropertyRef Name="StorageId" />
+      </Principal>
+      <Dependent Role="SampleHistory">
+        <PropertyRef Name="StorageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SampleHistory_TubeSample">
+    <End Type="SpecLabModel.TubeSample" Role="TubeSample" Multiplicity="1" />
+    <End Type="SpecLabModel.SampleHistory" Role="SampleHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TubeSample">
+        <PropertyRef Name="TubeId" />
+      </Principal>
+      <Dependent Role="SampleHistory">
+        <PropertyRef Name="TubeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Content">
+    <Key>
+      <PropertyRef Name="ContentId" />
+    </Key>
+    <Property Type="String" Name="ContentId" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="ContentText" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Type="DateTime" Name="CreateDate" Nullable="false" Precision="3" />
+    <Property Type="DateTime" Name="UpdateDate" Nullable="false" Precision="3" />
+    <Property Type="String" Name="CreateUser" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="UpdateUser" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Header">
+    <Key>
+      <PropertyRef Name="LabID" />
+    </Key>
+    <Property Name="Hospital" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Lab" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Chief" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="PosSign" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="LabID" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="WebSite" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Chief2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="PosSign2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+</Schema>

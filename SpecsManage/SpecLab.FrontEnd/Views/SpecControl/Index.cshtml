@@ -1,0 +1,404 @@
+﻿@using SpecLab.Business.BusinessEnum
+@using SpecLab.FrontEnd
+@model SpecLab.FrontEnd.Models.SpecControl.SpecControlModel
+
+@{
+    ViewBag.Title = "Quản lý mẫu";
+}
+
+@section style {
+    @Styles.Render("~/Content/pages/spec_control.css")
+    @Styles.Render("~/Content/pages/storage_select_LocationNum.css")
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/pages/spec_control.js")
+}
+
+<script type="text/javascript">
+    window.defaultSearchValue = {
+        fromDate : "@Model.StartSearchDateString",
+        toDate: "@Model.EndSearchDateString",
+        specId: "",
+        tubeId: "",
+        storageId: "@SpecLab.FrontEnd.SpecLabWebConstant.SearchAllValue",
+        locationId: "",
+    };
+    window.statusList = @SpecLab.FrontEnd.WebUtils.RenderJSON(@Model.TubeStatusList);
+
+    window.updateUrl = "@Url.Action("Update", "SpecControl")";
+    window.historyUrl = "@Url.Action("History", "SpecControl")";
+    window.searchUrl = "@Url.Action("Search", "SpecControl")";
+    window.hasOverrideRight = @WebUtils.RenderJSON(SessionUtils.LoginUserInfo.Rights.Contains(UserRightCode.R00603));
+</script>
+
+<div id="mainContentDisplay" class="col-md-10" ng-app="myApp" ng-controller="SpecsController">
+    <!-- Chọn vị trí mẫu lưu -->
+    <div class="modal modal-wide fade" id="dialogSelectLocationNum" tabindex="-1" role="dialog" aria-labelledby="dialogLabconnFindLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header btn-warning">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="dialogLabconnFindLabel">KHAY LƯU MẪU</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapseLabconnFind_ListResult">
+                                        Chọn vị trí mẫu được lưu
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-curved">
+                                            <thead id="theadstorage">
+                                            </thead>
+                                            <tbody id="tbodystorage"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapseLabconnFind_ListResult">
+                                        Ký hiệu màu trạng thái vị trí lưu
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="col-lg-12" style="margin: 10px;">
+                                <div class="col-lg-1"><div class="circle2"><p class="centertext_in_Comment_Null_export">Trống</p></div></div>
+                                @*<div class="col-lg-1"><div class="circle0"><p class="centertext_in_Comment">Mẫu tốt</p></div></div>*@
+                                <div class="col-lg-1"><div class="circle1"><p class="centertext_in_Comment">Đang xuất</p></div></div>
+                                <div class="col-lg-1"><div class="circle5"><p class="centertext_in_Comment">Trong kho</p></div></div>
+                                <div class="col-lg-1"><div class="circle3"><p class="centertext_in_Comment">Hỏng</p></div></div>
+                                <div class="col-lg-1"><div class="circle4"><p class="centertext_in_Comment">Hết</p></div></div>
+                                <div class="col-lg-1"><div class="circle6"><p class="centertext_in_Comment">Quá lần</p></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Đóng</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- Modal Update Tube -->
+    <div class="modal modal-wide fade" id="dialogUpdateTube" tabindex="-1" role="dialog" aria-labelledby="dialogUpdateTubeLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" ng-submit="submitUpdateTube()">
+                    <div class="modal-header btn-warning">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="H1">Lưu lại mẫu sau khi sử dụng</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="validation-summary-errors">
+                            <ul>
+                                <li ng-show="updateTube.UpdateSuccessful">Lưu lại ống {{updateTube.TubeId}} thành công.</li>
+                                <li ng-show="updateTube.ErrorLocationZero">Vị trí lưu trữ phải lớn hơn giá trị [0].</li>
+                                <li ng-show="updateTube.ErrorLocationOutbound">Vị trí lưu trữ mẫu nằm ngoài khung giới hạn.</li>
+                                <li ng-show="updateTube.BussinessError != ''">{{updateTube.BussinessError}}</li>
+                            </ul>
+                        </div>
+
+
+                        <div ng-show="!updateTube.UpdateSuccessful">
+                            <div class="row">
+                                <div class="col-md-2"><label for="dialogUpdateTube_txtSpecId">Mã bệnh phẩm</label></div>
+                                <div class="col-md-4"><input type="text" class="form-control" id="dialogUpdateTube_txtSpecId" ng-model="updateTube.SpecId" value="{{updateTube.SpecId}}" readonly="readonly" /></div>
+                                <div class="col-md-2"><label for="dialogUpdateTube_txtTubeId">Mã ống</label></div>
+                                <div class="col-md-4"><input type="text" class="form-control" id="dialogUpdateTube_txtTubeId" ng-model="updateTube.TubeId" value="{{updateTube.TubeId}}" readonly="readonly" /></div>
+                            </div>
+
+                            <!--
+                                <div class="row">
+                                    <div class="col-md-2"><label for="dialogUpdateTube_txtSource">Nguồn</label></div>
+                                    <div class="col-md-10"><input type="text" class="form-control" id="dialogUpdateTube_txtSource" value="{{selectedSpec.source}}" readonly="readonly" /></div>
+                                </div>
+                                -->
+                            <div class="row">
+                                <!--
+                                    <div class="col-md-2"><label for="dialogUpdateTube_txtInputDateTime">Ngày giờ lưu lại</label></div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control datepicker-input" id="dialogUpdateTube_txtInputDateTime" value="20/01/2014 08:00:00" readonly="readonly" />
+                                    </div>
+                                    -->
+                                <div class="col-md-2"><label for="dialogUpdateTube_cmbStatus">Tình trạng</label></div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="dialogUpdateTube_cmbStatus" ng-model="updateTube.Status" ng-options="obj.Status as obj.Description for obj in listStatusUpdatable(updateTube)">
+                                        >
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2"><label for="dialogUpdateTube_txtVolume">Thể tích</label></div>
+                                <div class="col-md-4"><input type="text" class="form-control" id="dialogUpdateTube_txtVolume" ng-model="updateTube.Volume" value="{{updateTube.Volume}}" maxlength="10" /></div>
+
+                                <div class="col-md-6 validation-summary-errors" ng-show="updateTube.Volume > updateTube.OldVolume">* Thể tích cập nhật không được lớn hơn hiện tại</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2"><label for="dialogUpdateTube_cmbStorageId">Mã lưu trữ</label></div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="dialogUpdateTube_cmbStorageId" ng-model="updateTube.StorageId" value="{{updateTube.StorageId}}" maxlength="10" required="" />
+                                </div>
+                                <div class="col-md-2"><label for="dialogUpdateTube_txtLocationNum">Vị trí</label></div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="dialogUpdateTube_txtLocationNum" ng-model="updateTube.LocationNum" maxlength="10" value="{{updateTube.LocationNum}}" aria-describedby="basic-addon1" />
+                                        <span class="input-group-addon" style="padding:0" id="basic-addon1">
+                                            <button data-dismiss="modal" style="border:0" ng-click="ViewCheckLocationNumChangeStorage(updateTube);"><i class="glyphicon glyphicon-search"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default btn-primary" ng-show="validateUpdateSample() && !updateTube.UpdateSuccessful">Lưu thay đổi</button>
+                        <button type="button" class="btn" data-dismiss="modal">Đóng</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- Modal History Specs List -->
+    <div class="modal modal-wide fade" id="dialogHistorySpecs" tabindex="-1" role="dialog" aria-labelledby="dialogHistorySpecsLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header btn-warning">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="dialogHistorySpecsLabel">Lịch sử sử dụng</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-group" id="collapseHistoryContent">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapseHistory_Info">
+                                        Thông tin chung
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseHistory_Info" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-2"><label for="dialogHistorySpecs_txtDateInput">Ngày nhập</label></div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="dialogHistorySpecs_txtDateInput" ng-model="selectedSpec.InputDateDisplay" value="{{selectedSpec.InputDateDisplay}}" readonly="readonly" />
+                                        </div>
+                                        <div class="col-md-2"><label for="dialogHistorySpecs_txtType">Trạng thái</label></div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="dialogHistorySpecs_txtType" ng-model="selectedSpec.StatusDisplay" value="{{selectedSpec.StatusDisplay}}" readonly="readonly" />
+                                        </div>
+                                        <div class="col-md-2"><label for="dialogHistorySpecs_txtStatus">Tình trạng</label></div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="dialogHistorySpecs_txtStatus" ng-model="selectedSpec.StatusDisplay" value="{{selectedSpec.StatusDisplay}}" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2"><label for="dialogHistorySpecs_txtSpecId">Mã bệnh phẩm</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control" id="dialogHistorySpecs_txtSpecId" ng-model="selectedSpec.SpecId" value="{{selectedSpec.SpecId}}" readonly="readonly" /></div>
+                                        <div class="col-md-2"><label for="dialogHistorySpecs_txtTubeId">Mã ống</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control" id="dialogHistorySpecs_txtTubeId" ng-model="selectedSpec.TubeId" value="{{selectedSpec.TubeId}}" readonly="readonly" /></div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-2"><label for="dialogHistorySpecs_txtStorageId">Mã lưu trữ</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control" id="dialogHistorySpecs_txtStorageId" ng-model="selectedSpec.StorageId" value="{{selectedSpec.StorageId}}" readonly="readonly" /></div>
+                                        <div class="col-md-2"><label for="dialogHistorySpecs_txtLocationNum">Vị trí</label></div>
+                                        <div class="col-md-4"><input type="text" class="form-control" id="dialogHistorySpecs_txtLocationNum" ng-model="selectedSpec.LocationNum" value="{{selectedSpec.LocationNum}}" readonly="readonly" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapseHistory_ListResult">
+                                        Lịch sử
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseHistory_ListResult" class="panel-collapse collapse in">
+                                <div class="panel-body table-responsive">
+                                    <table class="table table-hover table-curved">
+                                        <thead>
+                                            <tr class="info">
+                                                <th>#</th>
+                                                <th>Thời điểm</th>
+                                                <th>Hành động</th>
+                                                <th>User</th>
+                                                <th>Thể tích</th>
+                                                <th>Tình trạng</th>
+                                                <th>Mã lưu trữ</th>
+                                                <th>Vị trí</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-show="selectedHistoryList.length == 0">
+                                                <td colspan="8">
+                                                    <h4 class="text-warning text-center">
+                                                        Không có dữ liệu
+                                                    </h4>
+                                                </td>
+                                            </tr>
+                                            <tr ng-repeat="history in selectedHistoryList">
+                                                <td>{{$index + 1}}</td>
+                                                <td>{{history.HistoryDateDisplay}}</td>
+                                                <td>{{history.ActionDisplay}}</td>
+                                                <td>{{history.UserId}}</td>
+                                                <td>{{history.VolumeDisplay}}</td>
+                                                <td>{{history.ConditionDisplay}}</td>
+                                                <td>{{history.StorageId}}</td>
+                                                <td class="columnLocationNum">{{history.LocationNum}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Đóng</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="panel-group" id="collapseSpecsContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseSpecsContent_Search">
+                        Tìm kiếm mẫu
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSpecsContent_Search" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <form role="form">
+
+
+                        <div class="row">
+                            <div class="col-md-2"><label for="txtSearchInputFrom">Ngày nhập từ</label></div>
+                            <div class="col-md-4">
+                                <div class="input-group date">
+                                    <input type="text" class="form-control datepicker-input" id="txtSearchInputFrom" ng-model="searchCriteria.fromDate" value="{{searchCriteria.fromDate}}" /><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-md-2"><label for="txtSearchInputTo">Ngày nhập đến</label></div>
+                            <div class="col-md-4">
+                                <div class="input-group date">
+                                    <input type="text" class="form-control datepicker-input" id="txtSearchInputTo" ng-model="searchCriteria.toDate" value="{{searchCriteria.toDate}}" /><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2"><label for="txtSearchSpecId">Mã bệnh phẩm</label></div>
+                            <div class="col-md-4"><input type="text" class="form-control" id="txtSearchSpecId" ng-model="searchCriteria.specId" value="{{searchCriteria.specId}}" maxlength="20" /></div>
+                            <div class="col-md-2"><label for="txtSearchTubeId">Mã ống</label></div>
+                            <div class="col-md-4"><input type="text" class="form-control" id="txtSearchTubeId" ng-model="searchCriteria.tubeId" value="{{searchCriteria.tubeId}}" maxlength="20" /></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2"><label for="txtSearchStorageId">Mã lưu trữ</label></div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="txtSearchStorageId" ng-model="searchCriteria.storageId" maxlength="10" />
+                            </div>
+                            <div class="col-md-2"><label for="txtSearchLocationNum">Vị trí</label></div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="txtSearchLocationNum" ng-model="searchCriteria.locationId" maxlength="10" aria-describedby="basic-addon1" />
+                                    <span class="input-group-addon" style="padding:0" id="basic-addon1">
+                                        <button data-dismiss="modal" style="border:0" ng-click="ViewCheckLocationNum(searchCriteria);"><i class="glyphicon glyphicon-search"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-default" ng-click="searchSpec()">Tìm kiếm</button>
+                        <!-- <button type="reset" class="btn">Reset</button> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseSpecsContent_Result">
+                        Kết quả tìm kiếm
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSpecsContent_Result" class="panel-collapse collapse in">
+                <div class="panel-body table-responsive">
+                    <table class="table table-hover table-curved">
+                        <thead>
+                            <tr class="info">
+                                <th>#</th>
+                                <th>Mã ống</th>
+                                <th>Mã bệnh phẩm</th>
+                                <th>Ngày nhập kho</th>
+                                <th>Thể tích</th>
+                                <th>Mã lưu trữ</th>
+                                <th>Vị trí</th>
+                                <th>Tình trạng</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-show="specsList.length == 0">
+                                <td colspan="9">
+                                    <h4 class="text-warning text-center">
+                                        Không có dữ liệu
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="spec in specsList">
+                                <td class="columnIndex">{{$index + 1}}</td>
+                                <td class="columnTubeId">{{spec.TubeId}}</td>
+                                <td class="columnSpecId">{{spec.SpecId}}</td>
+                                <td class="columnInpuDate">{{spec.InputDateDisplay}}</td>
+                                <td class="columnInpuDate">{{spec.VolumeDisplay}}</td>
+                                <td class="columnStorageId">{{spec.StorageId}}</td>
+                                <td class="columnLocationNum">{{spec.LocationNum}}</td>
+                                <td class="columnStatus">{{spec.ConditionDisplay}}</td>
+                                <td class="columnAction">
+                                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00601))
+                                    {
+                                        <button type="button" class="btn btn-sm btn-success" data-toggle="modal" ng-click="showHistory(spec)">Lịch sử</button>
+                                    }
+
+                                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00602))
+                                    {
+                                        <button type="button" class="btn btn-sm btn-info" data-toggle="modal" ng-click="showUpdate(spec)" ng-show="canUpdateSample(spec)">Lưu lại mẫu</button>
+                                    }
+
+                                    @if (SessionUtils.LoginUserInfo.IsAuthorize(UserRightCode.R00603))
+                                    {
+                                        <button type="button" class="btn btn-sm btn-info" data-toggle="modal" ng-click="showUpdate(spec)" ng-show="canUpdateSampleRemoved(spec)">Khôi phục hủy</button>
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

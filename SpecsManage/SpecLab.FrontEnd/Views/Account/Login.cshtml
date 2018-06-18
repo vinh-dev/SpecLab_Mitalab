@@ -1,0 +1,50 @@
+﻿@model SpecLab.FrontEnd.Models.LoginModel
+
+@{
+    Layout = null;
+ }
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="~/images/test-tube-multi-size.ico" rel="shortcut icon" type="image/x-icon" />
+
+    @Styles.Render("~/Content/bootstrap.min.css", "~/Content/common.css", "~/Content/pages/signin.css")
+    @Scripts.Render("~/Scripts/bootstrap.min.js", "~/Scripts/speclab.common.js", "~/Scripts/pages/signin.js")
+    
+	<title>@SpecLab.Business.CommonConstant.AppName - Đăng nhập</title>
+</head>
+    <body>
+        
+        <div class="container">
+            <h2 class="form-signin-heading">Vui lòng đăng nhập</h2>
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <div class="row">
+                    <div class="col-md-4" id="lblUserName" ><label for="txtUserName">Tài khoản</label></div>
+                    <div class="col-md-8">@Html.TextBoxFor(m => m.UserName, new { autofocus="", placeholder="Id đăng nhập", required="", @class="form-control", id="txtUserName"})</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4" id="lblPassword" ><label for="txtPassword">Mật khẩu</label></div>
+                    <div class="col-md-8">@Html.PasswordFor(m => m.Password, new { placeholder="Mật khẩu", required="", @class="form-control", id="txtPassword"})</div>
+                </div>
+                 
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8">@Html.CheckBoxFor(m => m.RememberMe, new { @class = "" }) Ghi nhớ </div>
+                </div>
+                
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Đăng nhập</button>
+            }
+        </div> <!-- /container -->
+
+    </body>
+</html>

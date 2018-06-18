@@ -1,0 +1,309 @@
+﻿@model SpecLab.FrontEnd.Models.SpecRemoval.SpecRemovalCreateModel
+
+@{
+    ViewBag.Title = "Tạo phiếu hủy";
+}
+
+@section style {
+    @Styles.Render("~/Content/pages/spec_removal.css")
+    @Styles.Render("~/Content/pages/storage_select_LocationNum.css")
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/pages/spec_removal_create.js")
+}
+
+<script type="text/javascript">
+
+    window.currentUser = "@Model.CurrentUser";
+    window.removalDateDisplay = "@Model.RemovalDateDisplay";
+    window.removalId = "@Model.RemovalId";
+    window.userList = @SpecLab.FrontEnd.WebUtils.RenderJSON(@Model.UserList);
+    window.statusAllowList = @SpecLab.FrontEnd.WebUtils.RenderJSON(@Model.StatusAllowList);
+
+    window.IncreateRE = "@Url.Action("IncreateRE", "SpecRemoval")";
+    window.createUrl = "@Url.Action("Create", "SpecRemoval")";
+    window.findTubeUrl = "@Url.Action("Search", "SpecControl")";
+    window.printUrl = "@Url.Action("Print", "SpecRemoval")";
+</script>
+
+<div id="mainContentDisplay" class="col-md-10" ng-app="myApp" ng-controller="SpecRemovalController">
+    <!-- Chọn vị trí mẫu lưu -->
+    <div class="modal modal-wide fade" id="dialogSelectLocationNum" tabindex="-1" role="dialog" aria-labelledby="dialogLabconnFindLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header btn-warning">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="dialogLabconnFindLabel">KHAY LƯU MẪU</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapseLabconnFind_ListResult">
+                                        Chọn vị trí mẫu được lưu
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-curved">
+                                            <thead id="theadstorage">
+                                            </thead>
+                                            <tbody id="tbodystorage"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapseLabconnFind_ListResult">
+                                        Ký hiệu màu trạng thái vị trí lưu
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="col-lg-12" style="margin: 10px;">
+                                <div class="col-lg-1"><div class="circle2"><p class="centertext_in_Comment_Null_export">Trống</p></div></div>
+                                @*<div class="col-lg-1"><div class="circle0"><p class="centertext_in_Comment">Mẫu tốt</p></div></div>*@
+                                <div class="col-lg-1"><div class="circle1"><p class="centertext_in_Comment">Đang xuất</p></div></div>
+                                <div class="col-lg-1"><div class="circle5"><p class="centertext_in_Comment">Trong kho</p></div></div>
+                                <div class="col-lg-1"><div class="circle3"><p class="centertext_in_Comment">Hỏng</p></div></div>
+                                <div class="col-lg-1"><div class="circle4"><p class="centertext_in_Comment">Hết</p></div></div>
+                                <div class="col-lg-1"><div class="circle6"><p class="centertext_in_Comment">Quá lần</p></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Đóng</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- Modal Find Tube to Removal  -->
+    <div class="modal modal-wide fade" id="dialogFindTubeToRemoval" tabindex="-1" role="dialog" aria-labelledby="dialogFindTubeToRemovalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header btn-warning">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="dialogFindTubeToRemovalLabel">Tìm mẫu để hủy</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-group" id="Div4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapseHistory_Info">
+                                        Thông tin tìm kiếm
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="Div5" class="panel-collapse collapse in">
+                                <div class="panel-body">
+
+                                    <form ng-submit="searchTube()">
+                                        <div class="row">
+                                            <div class="col-md-2"><label for="dialogFindTubeToRemoval_txtSearchSpecId">Mã bệnh phẩm</label></div>
+                                            <div class="col-md-4"><input type="text" class="form-control" id="dialogFindTubeToRemoval_txtSearchSpecId" ng-model="findTubeCriteria.specId" maxlength="20" /></div>
+                                            <div class="col-md-2"><label for="dialogFindTubeToRemoval_txtSearchTubeId">Mã ống</label></div>
+                                            <div class="col-md-4"><input type="text" class="form-control" id="dialogFindTubeToRemoval_txtSearchTubeId" ng-model="findTubeCriteria.tubeId" maxlength="20" /></div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-2"><label for="dialogFindTubeToRemoval_txtSearchStorageId">Mã lưu trữ</label></div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" id="dialogFindTubeToRemoval_txtSearchStorageId" ng-model="findTubeCriteria.storageId" maxlength="10" />
+                                            </div>
+                                            <div class="col-md-2"><label for="dialogFindTubeToRemoval_txtSearchLocationNum">Vị trí</label></div>
+                                            <div class="col-md-4">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="dialogFindTubeToRemoval_txtSearchLocationNum" ng-model="findTubeCriteria.locationNum" maxlength="10" aria-describedby="basic-addon1" />
+                                                    <span class="input-group-addon" style="padding:0" id="basic-addon1">
+                                                        <button data-dismiss="modal" style="border:0" ng-click="ViewCheckLocationNum(findTubeCriteria);"><i class="glyphicon glyphicon-search"></i></button>
+
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-default">Tìm kiếm</button>
+                                        <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="submitFindTubeList()" ng-show="findTubeList.length > 0">Thêm vào danh sách</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapseHistory_ListResult">
+                                        Danh sách hủy
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="Div6" class="panel-collapse collapse in">
+                                <div class="panel-body table-responsive">
+                                    <table class="table table-hover table-curved">
+                                        <thead>
+                                            <tr class="info">
+                                                <th class="selectRemovalCol"> </th>
+                                                <th>#</th>
+                                                <th>Mã bệnh phẩm</th>
+                                                <th>Mã ống</th>
+                                                <th>Tình trạng</th>
+                                                <th>Thể tích</th>
+                                                <th>Mã lưu trữ</th>
+                                                <th>Vị trí</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-show="findTubeList.length == 0">
+                                                <td colspan="8">
+                                                    <h4 class="text-warning text-center">
+                                                        Không có dữ liệu
+                                                    </h4>
+                                                </td>
+                                            </tr>
+                                            <tr ng-repeat="tube in findTubeList">
+                                                <td class="selectRemovalCol"><input type="checkbox" class="form-control" ng-model="tube.selected" /></td>
+                                                <td>{{$index + 1}}</td>
+                                                <td>{{tube.SpecId}}</td>
+                                                <td>{{tube.TubeId}}</td>
+                                                <td>{{tube.ConditionDisplay}}</td>
+                                                <td>{{tube.VolumeDisplay}}</td>
+                                                <td>{{tube.StorageId}}</td>
+                                                <td>{{tube.LocationNum}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Đóng</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="panel-group" id="collapseSpecsContent">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseSpecsContent_Search">
+                        Thông tin phiếu hủy
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSpecsContent_Search" class="panel-collapse collapse in">
+                <div class="panel-body">
+
+                    <div class="validation-summary-errors">
+                        <ul>
+                            <li ng-show="newRemoval.importSuccessful">Tạo phiếu hủy {{newRemoval.removalId}} thành công.</li>
+                            <li ng-show="newRemoval.errorReasonEmpty">Vui lòng điền lý do hủy.</li>
+                            <li ng-show="newRemoval.bussinessError != ''">{{newRemoval.bussinessError}}</li>
+                        </ul>
+                    </div>
+
+                    <div class="row" style="margin-left: 10px;" ng-show="newRemoval.importSuccessful">
+                        <a href="{{getPrintUrl(newRemoval.removalId)}}" class="btn btn-primary active" role="button" target="_blank">In phiếu</a>
+                        @*<button type="button" class="btn btn-info" ng-click="refreshNewRemoval()">Tạo phiếu mới</button>*@
+                    </div>
+
+                    <div>
+                        @* ng-show="!newRemoval.importSuccessful"*@
+                    <form role="form">
+
+                        <div class="row">
+                            <div class="col-md-2"><label for="dialogCreateRemoval_txtRemovalId">Mã hủy</label></div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="dialogCreateRemoval_txtRemovalId" ng-model="newRemoval.removalId" value="{{newRemoval.removalId}}" maxlength="20" readonly="readonly" />
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" ng-click="showFindTubeToRemoval()">Kiếm mẫu</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2"><label for="dialogCreateRemoval_txtNumberRemoval">Số lượng mẫu</label></div>
+                            <div class="col-md-4"><input type="text" class="form-control" id="dialogCreateRemoval_txtNumberRemoval" value="{{newRemoval.tubeList.length}}" readonly="readonly" /></div>
+                            <div class="col-md-2"><label for="dialogCreateRemoval_txtRemovalDate">Ngày hủy</label></div>
+                            <div class="col-md-4"><input type="text" class="form-control" id="dialogCreateRemoval_txtRemovalDate" value="{{newRemoval.removalDate}}" readonly="readonly" /></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2"><label for="dialogCreateRemoval_txtRemovalUser">Người hủy</label></div>
+                            <div class="col-md-10"><input type="text" class="form-control" id="dialogCreateRemoval_txtRemovalUser" value="{{newRemoval.removalUser}}" readonly="readonly" /></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2"><label for="dialogCreateRemoval_txtRemovalReason">Lý do hủy</label></div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="dialogCreateRemoval_txtRemovalReason" ng-model="newRemoval.removalReason" value="{{newRemoval.removalReason}}" maxlength="50" required="" />
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" ng-click="refreshNewRemoval()">Tạo phiếu hủy</button>
+                        <button type="button" class="btn btn-success" ng-show="newRemoval.tubeList.length > 0" ng-click="submitRemoval()">Lưu phiếu hủy</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default" ng-show="!newRemoval.importSuccessful">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#collapseSpecsContent_Result">
+                    Danh sách hủy
+                </a>
+            </h4>
+        </div>
+        <div id="collapseSpecsContent_Result" class="panel-collapse collapse in">
+            <div class="panel-body table-responsive">
+                <table class="table table-hover table-curved">
+                    <thead>
+                        <tr class="info">
+                            <th>#</th>
+                            <th>Mã bệnh phẩm</th>
+                            <th>Mã ống</th>
+                            <th>Tình trạng</th>
+                            <th>Thể tích</th>
+                            <th>Mã lưu trữ</th>
+                            <th>Vị trí</th>
+                            <th>Hủy chọn</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-show="newRemoval.tubeList.length == 0">
+                            <td colspan="8">
+                                <h4 class="text-warning text-center">
+                                    Không có dữ liệu
+                                </h4>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="tube in newRemoval.tubeList">
+                            <td>{{$index + 1}}</td>
+                            <td>{{tube.SpecId}}</td>
+                            <td>{{tube.TubeId}}</td>
+                            <td>{{tube.ConditionDisplay}}</td>
+                            <td>{{tube.VolumeDisplay}}</td>
+                            <td>{{tube.StorageId}}</td>
+                            <td>{{tube.LocationNum}}</td>
+                            <td class="columnAction">
+                                <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" ng-click="removeCreatedTubeItem(tube)">Hủy chọn</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,26 @@
+.table .columnAction, 
+.table .columnStorageId, 
+.table .columnStatus, 
+.table .columnInpuDate {
+    text-align: center;
+}
+
+.table .columnLocationNum {
+    text-align: right;
+}
+
+#dialogHistorySpecs.modal.modal-wide .modal-dialog {
+    width: 90%;
+}
+
+#dialogHistorySpecs.modal-wide .modal-body {
+    overflow-y: auto;
+}
+
+#dialogUpdateTube.modal.modal-wide .modal-dialog {
+    width: 950px;
+}
+
+#dialogUpdateTube.modal-wide .modal-body {
+    overflow-y: auto;
+}

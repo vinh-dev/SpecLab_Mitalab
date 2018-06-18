@@ -1,0 +1,59 @@
+﻿@model SpecLab.FrontEnd.Models.ChangePassModel
+
+@{
+    ViewBag.Title = "Đổi mật khẩu";
+}
+
+@section style {
+    @Styles.Render("~/Content/change_pass")
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/change_pass")
+}
+
+<div id="mainContentDisplay" class="col-md-10" ng-app="myApp" ng-controller="ChangePassController">                    
+
+    <div class="panel-group" id="collapseChangePass">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapseChangePass_Search">
+                        Đổi mật khẩu
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseChangePass_Search" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    
+                    @using (Html.BeginForm("ChangePass", "Account", null, FormMethod.Post, new Dictionary<string, object>(){{ "class", "form-signin"}, { "role", "form"}, { "ng-submit", "submit()"}}))
+                    {
+                        <div class="row">
+                            <div class="col-md-4"><label for="txtOldPassword">Mật khẩu cũ</label></div>
+                            <div class="col-md-8">
+                                @Html.PasswordFor(m => m.OldPassword, new { placeholder="Mật khẩu cũ", required="", autofocus="", @class="form-control", id="txtOldPassword"})
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4"><label for="txtNewPassword">Mật khẩu mới</label></div>
+                            <div class="col-md-8">
+                                @Html.PasswordFor(m => m.OldPassword, new { placeholder="Mật khẩu mới", required="", @class="form-control", id="txtNewPassword"})
+                            </div>
+                        </div>
+                                        
+                        <div class="row">
+                            <div class="col-md-4"><label for="txtNewPasswordConfirm">Xác nhận mật khẩu</label></div>
+                            <div class="col-md-8">
+                                <input type="password" class="form-control" id="txtNewPasswordConfirm" placeholder="Xác nhận mật khẩu" required />
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-default">Đổi mật khẩu</button>
+                        <button type="reset" class="btn">Reset</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
