@@ -75,10 +75,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SpebLab.Database\SpebLab.Database.sqlproj">
-      <Project>{6bececd7-08ba-47e7-a541-b8cbc6fc238b}</Project>
-      <Name>SpebLab.Database</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SpecLab.Business\SpecLab.Business.csproj">
       <Project>{8bc33ada-66bd-489d-a44d-7158715a4f0f}</Project>
       <Name>SpecLab.Business</Name>
